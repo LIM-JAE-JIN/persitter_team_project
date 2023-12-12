@@ -6,6 +6,93 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
+}
+model Users {
+  userId        Int           @id @default(autoincrement()) @map("userId")  
+  email         String        @unique
+  password      String
+  imgUrl        String        @default("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png") @map("imgUrl")
+  phone         Int           @unique
+  createdAt     DateTime      @default(now())               @map("createdAt")
+  updatedAt     DateTime      @updatedAt @default(now())    @map("updatedAt")
+  Pets          Pets[]
+  Reviews       Reviews[]
+  Appointments  Appointments[]
+
+  @@map("Users")
+}
+
+enum petCategory{
+  CAT
+  DOG
+  ETC
+}
+
+model Pets {
+  petId       Int         @id @default(autoincrement()) @map("petId")
+  UserId      Int         @map("UserId")
+  petName     String      @map("petName")
+  petAge      Int         @map("petAge")
+  imgUrl      String      @map("imgUrl")
+  petCategory petCategory @map("petCategory") 
+  createdAt   DateTime    @default(now())               @map("createdAt")
+  updatedAt   DateTime    @updatedAt @default(now())    @map("updatedAt")
+  Users       Users       @relation(fields: [UserId], references: [userId], onDelete:Cascade)
+
+  @@map("Pets")
+}
+
+
+model Appointments{
+  appointmentId    Int            @id @default(autoincrement()) @map("appointmentId")
+  SitterId         Int            @map("SitterId")
+  UserId           Int            @map("UserId")
+  date             DateTime       @db.Date
+  petNum           Int            @map("petNum")
+  species          String
+  createdAt        DateTime       @default(now())               @map("createdAt")
+  updatedAt        DateTime       @updatedAt @default(now())    @map("updatedAt")
+  Reviews          Reviews?     
+  Users            Users          @relation(fields: [UserId], references: [userId], onDelete:Cascade)
+  PetSitters       PetSitters     @relation(fields: [SitterId], references: [sitterId], onDelete:Cascade)
+ 
+
+  @@map("Appointments")
+}
+
+model PetSitters{
+  sitterId         Int         @id @default(autoincrement()) @map("sitterId")
+  name             String      
+  introduce        String      
+  phone            Int         
+  imgUrl           String      @map("imgUrl")
+  address          String      
+  career           String     
+  createdAt        DateTime    @default(now())               @map("createdAt")
+  updatedAt        DateTime    @updatedAt @default(now())    @map("updatedAt")
+  Appointments     Appointments[]
+  Reviews          Reviews[]
+
+
+  @@map("PetSitters")
+}
+
+
+model Reviews{
+  reviewId         Int            @id @default(autoincrement()) @map("reviewId")
+  AppointmentId    Int            @unique @map("AppointmentId")
+  UserId           Int            @map("UserId")
+  SitterId         Int            @map("SitterId")
+  content          String
+  raiting          Int
+  createdAt        DateTime       @default(now())               @map("createdAt")
+  updatedAt        DateTime       @updatedAt @default(now())    @map("updatedAt")
+  Users            Users          @relation(fields: [UserId], references: [userId], onDelete:Cascade)
+  Appointments     Appointments   @relation(fields: [AppointmentId], references: [appointmentId], onDelete:Cascade)
+  PetSitters       PetSitters     @relation(fields: [SitterId], references: [sitterId], onDelete:Cascade)
+
+
+  @@map("Reviews")
 }
