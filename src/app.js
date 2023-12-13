@@ -4,6 +4,7 @@ import { apiRouter } from './routers/index.js';
 import expressSession from 'express-session';
 import expressMySQLSession from 'express-mysql-session';
 import cookieParser from 'cookie-parser';
+import errorHandling from './middlewares/error.middleware.js';
 
 const app = express();
 
@@ -34,9 +35,10 @@ app.use(
     },
   }),
 );
-
 app.use('/api', apiRouter);
 app.use(express.static('./assets'));
+app.use(errorHandling);
+
 
 app.listen(process.env.SERVER_PORT, () => {
   console.log(`연결성공, 포트 ${process.env.SERVER_PORT}`);
