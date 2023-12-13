@@ -14,7 +14,8 @@ model Users {
   email         String        @unique
   password      String
   imgUrl        String        @default("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png") @map("imgUrl")
-  phone         Int           @unique
+  phone         String        @unique
+  address       String
   createdAt     DateTime      @default(now())               @map("createdAt")
   updatedAt     DateTime      @updatedAt @default(now())    @map("updatedAt")
   Pets          Pets[]
