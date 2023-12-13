@@ -17,4 +17,18 @@ export class UsersRepository {
       next(error);
     }
   };
+
+  findUserByEmail = async (email) => {
+    try {
+      const user = await prisma.Users.findFirst({
+        where: {
+          email,
+        },
+      });
+      return user;
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  };
 }
