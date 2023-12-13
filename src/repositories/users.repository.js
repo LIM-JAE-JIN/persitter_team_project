@@ -31,4 +31,50 @@ export class UsersRepository {
       next(error);
     }
   };
+
+  findUserById = async (userId) => {
+    try {
+      const user = await prisma.Users.findFirst({
+        where: {
+          userId: +userId,
+        },
+      });
+      return user;
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  };
+
+  updateMyInfo = async (user, password, phone, imgUrl, address) => {
+    try {
+      await prisma.Users.update({
+        where: {
+          userId: +user.userId,
+        },
+        data: {
+          password: password ?? user.password,
+          phone: phone ?? user.phone,
+          imgUrl: imgUrl ?? imgUrl,
+          address: address ?? user.address,
+        },
+      });
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  };
+
+  deleteMyInfo = async (userId) => {
+    try {
+      await prisma.Users.delete({
+        where: {
+          userId: +userId,
+        },
+      });
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  };
 }
