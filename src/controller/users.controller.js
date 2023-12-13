@@ -52,4 +52,45 @@ export class UsersController {
       next(error);
     }
   };
+
+  signIn = async (req, res, next) => {
+    try {
+      const { email, password } = req.body;
+
+      if (!email) {
+        throw Error('이메일을 입력해주세요');
+      }
+
+      if (!password) {
+        throw Error('비밀번호를 입력해주세요');
+      }
+
+      const user = await this.usersService.signIn(req, email, password);
+
+      return res.status(201).json({
+        success: true,
+        message: '성공적으로 로그인 되었습니다.',
+        data: {
+          userId: user.userId,
+          email: user.email,
+          phone: user.phone,
+          address: user.address,
+        },
+      });
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  };
+
+  getMyInfo = async (req, res, next) => {
+    try {
+      const user = req.user;
+      console.log(user);
+      return res.status(200).json(user);
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  };
 }
