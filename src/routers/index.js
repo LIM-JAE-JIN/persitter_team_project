@@ -1,120 +1,12 @@
 import { Router } from 'express';
-import { prisma } from '../utils/prisma/index.js'
-//import { PrismaClient } from '@prisma/client';
+import { reviewsRouter } from './reviews.router.js';
+import { usersRouter } from './users.router.js';
 
-//const prisma = new PrismaClient();
 const apiRouter = Router();
 
-// 펫 생성
-apiRouter.post('/pets', async (req, res) => {
-    const { petName, petAge, imgUrl, petCategory } = req.body;
-    try {
-        const createdPet = await prisma.pets.create({
-            data: {
-                petName,
-                petAge,
-                imgUrl,
-                petCategory,
-            },
-        });
-        res.status(200).json({
-            success: true,
-            message: "성공적으로 생성되었습니다.",
-            data: createdPet
-        });
-    } catch (error) {
-        console.log("에러 : ", error);
-        return res.status(500).json({ error: "에러 발생" });
-    }
-});
 
-// 펫 조회
-apiRouter.get('/pets', async (req, res) => {
-    try {
-        const getPets = await prisma.pets.findMany({
-            select: {
-                petName: true,
-                petAge: true,
-                petCategory: true,
-                createdAt: true,
-                updatedAt: true,
-            },
-            orderBy: {
-                createdAt: 'desc'
-            }
-        });
+apiRouter.use('/users', usersRouter);
+apiRouter.use('/reviews', reviewsRouter);
 
-        return res.status(200).json({
-            message: "성공적으로 조회 되었습니다.",
-            data: getPets
-        });
-
-    } catch (error) {
-        console.log("에러 : ", error);
-        return res.status(500).json({ message: "에러 발생" });
-    }
-});
-
-
-// 펫 수정
-apiRouter.put('/pets/:petId', async (req, res) => {
-    const { petId } = req.params;
-    const { petName, petAge, imgUrl, petCategory } = req.body;
-
-    try {
-        if (!petId) {
-            return res.status(404).json({ message: "존재하지 않는 펫입니다." });
-        }
-        const updatedPet = await prisma.pets.update({
-            where: { petId: +petId },
-            data: {
-                petName,
-                petAge,
-                imgUrl,
-                petCategory,
-            },
-        });
-
-        res.status(200).json({
-            success: true,
-            message: "성공적으로 수정 되었습니다.",
-            data: updatedPet,
-        });
-
-    } catch (error) {
-        console.log("에러 : ", error);
-        return res.status(500).json({ message: "에러 발생" });
-    }
-
-});
-
-
-// 펫 삭제
-apiRouter.delete('/pets/:petId', async (req, res) => {
-    const { petId } = req.params;
-
-    try {
-        const existPet = await prisma.pets.findUnique({
-            where: { petId: +petId }
-        });
-
-        if (!existPet) {
-            return res.status(404).json({ message: "존재하지 않는 펫입니다." });
-        }
-
-        await prisma.pets.delete({
-            where: { petId: +petId },
-        });
-
-        res.status(200).json({
-            success: true,
-            message: "성공적으로 삭제 되었습니다.",
-        });
-
-    } catch (error) {
-        console.log("에러 : ", error);
-        return res.status(500).json({ message: "에러 발생" });
-    }
-});
 
 export { apiRouter };

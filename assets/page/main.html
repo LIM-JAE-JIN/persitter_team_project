@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/common.css" />
+    <script type="module" src="/js/jquery-3.6.3.min.js"></script>
+    <script type="module" src="/js/common.js"></script>
+    <title>F4Sitter</title>
+  </head>
+
+  <body>
+    <!-- 헤더 s -->
+    <header class="header">
+      <div
+        class="dr-container header_wrap d-flex justify-content-start align-items-center"
+      >
+        <h2>
+          <a href="/page/main.html"> F4 SITTER </a>
+        </h2>
+        <!-- 2023-10-11 h2태그로 변경 -->
+        <div class="d-flex w-100 align-items-center">
+          <ul class="dr-hd-log justify-content-end w-100">
+            <li>
+              <!-- 비로그인 시 s -->
+              <div class="dr-user-off d-flex">
+                <a href="#none">로그인</a>
+                <a href="#none">회원가입</a>
+              </div>
+              <!-- 비로그인 시 e -->
+              <!-- 로그인 시 s -->
+              <div class="dr-user-on dr-user-off">
+                <a href="#none">마이페이지</a>
+                <a href="#none">로그아웃</a>
+              </div>
+              <!-- 로그인 시 e -->
+            </li>
+          </ul>
+        </div>
+        <div
+          class="dr-user-menu justify-content-end"
+          onclick="drPopupOpen('.dr-hd-m-menu')"
+        >
+          <img src="../../img/icon/icon_hambuger.png" alt="menu-icon" />
+        </div>
+      </div>
+    </header>
+    <div class="dr-header-box"></div>
+    <!-- 헤더 e -->
+  </body>
+</html>
