@@ -55,7 +55,7 @@ export class UsersRepository {
         data: {
           password: password ?? user.password,
           phone: phone ?? user.phone,
-          imgUrl: imgUrl ?? imgUrl,
+          imgUrl: imgUrl ?? user.imgUrl,
           address: address ?? user.address,
         },
       });
