@@ -1,3 +1,4 @@
+import { CustomError } from "../middlewares/error.middleware.js";
 export class ReviewsController {
   constructor(reviewsService) {
     this.reviewsService = reviewsService
