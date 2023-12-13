@@ -1,4 +1,4 @@
-import { UsersService } from '../service/users.service.js';
+import { UsersService } from '../services/users.service.js';
 
 export class UsersController {
   usersService = new UsersService();
