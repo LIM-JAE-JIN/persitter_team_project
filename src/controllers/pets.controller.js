@@ -46,7 +46,6 @@ export class PetsController {
 
         } catch (error) {
             console.log("에러 : ", error);
-            // return res.status(500).json({ message: "에러 발생" });
             next(error);
         }
     }
@@ -73,7 +72,6 @@ export class PetsController {
 
         } catch (error) {
             console.log("에러 : ", error);
-            // return res.status(500).json({ message: "에러 발생" });
             next(error);
         }
 
@@ -98,7 +96,6 @@ export class PetsController {
 
         } catch (error) {
             console.log("에러 : ", error);
-            // return res.status(500).json({ message: "에러 발생" });
             next(error);
         }
     }

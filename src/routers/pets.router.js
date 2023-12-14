@@ -10,14 +10,14 @@ const petsRouter = Router();
 petsRouter.post('/', auth, petsController.createPet);
 
 // 펫 조회
-petsRouter.get('/', petsController.getMyPets);
+petsRouter.get('/', auth, petsController.getMyPets);
 
 
 // 펫 수정 
-petsRouter.put('/:petId', petsController.updatePet);
+petsRouter.put('/:petId', auth, petsController.updatePet);
 
 
 // 펫 삭제 
-petsRouter.delete('/:petId', petsController.deletePet);
+petsRouter.delete('/:petId', auth, petsController.deletePet);
 
 export { petsRouter };
