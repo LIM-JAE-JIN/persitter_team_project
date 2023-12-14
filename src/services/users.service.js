@@ -26,7 +26,7 @@ export class UsersService {
     const exsistPhone = await this.usersRepository.findUserByPhone(phone);
 
     if (exsistPhone) {
-      throw new CustomError('이미 사용중인 핸드폰 입니다.', 400);
+      throw new CustomError('이미 사용중인 핸드폰 번호 입니다.', 400);
     }
 
     const salt = process.env.HASH_SALT_ROUNDS;
@@ -72,6 +72,12 @@ export class UsersService {
   putMyInfo = async (userId, password, phone, imgUrl, address) => {
     try {
       const user = await this.usersRepository.findUserById(userId);
+
+      const exsistPhone = await this.usersRepository.findUserByPhone(phone);
+
+      if (exsistPhone) {
+        throw new CustomError('이미 사용중인 핸드폰 번호 입니다.', 400);
+      }
 
       await this.usersRepository.updateMyInfo(
         user,

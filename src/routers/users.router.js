@@ -8,6 +8,7 @@ const userscontroller = new UsersController();
 
 usersRouter.post('/signup', userscontroller.signUp);
 usersRouter.post('/signin', userscontroller.signIn);
+usersRouter.get('/signout', auth, userscontroller.signOut);
 usersRouter.get('/me', auth, userscontroller.getMyInfo);
 usersRouter.put('/me', auth, userscontroller.putMyInfo);
 usersRouter.delete('/me', auth, userscontroller.deleteMyInfo);
