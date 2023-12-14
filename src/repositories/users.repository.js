@@ -46,6 +46,15 @@ export class UsersRepository {
     }
   };
 
+  findUserByPhone = async (phone) => {
+    const user = await prisma.users.findUnique({
+      where: {
+        phone,
+      },
+    });
+    return user;
+  };
+
   updateMyInfo = async (user, password, phone, imgUrl, address) => {
     try {
       await prisma.Users.update({

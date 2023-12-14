@@ -1,3 +1,4 @@
+import { CustomError } from '../middlewares/error.middleware.js';
 import { UsersService } from '../services/users.service.js';
 
 export class UsersController {
@@ -7,27 +8,30 @@ export class UsersController {
       const { email, password, confirmPassword, phone, address } = req.body;
 
       if (!email) {
-        throw Error('이메일을 입력해주세요');
+        throw new CustomError('이메일을 입력해 주세요', 400);
       }
 
       if (!password) {
-        throw Error('비밀번호를 입력해주세요');
+        throw new CustomError('비밀번호를 입력해 주세요', 400);
       }
 
       if (!confirmPassword) {
-        throw Error('비밀번호 확인을 입력해주세요');
+        throw new CustomError('비밀번호 확인을 입력해 주세요', 400);
       }
 
       if (!phone) {
-        throw Error('핸드폰 번호를 입력해주세요');
+        throw new CustomError('핸드폰 번호를 입력해 주세요', 400);
       }
 
       if (!address) {
-        throw Error('주소를 입력해주세요');
+        throw new CustomError('주소를 입력해주세요', 400);
       }
 
       if (password !== confirmPassword) {
-        throw Error('비밀번호와, 비밀번호 확인이 동일하지 않습니다.');
+        throw new CustomError(
+          '비밀번호와 비밀번호 확인이 일치하지 않습니다.',
+          400,
+        );
       }
 
       const newUser = await this.usersService.signUp(
@@ -58,11 +62,11 @@ export class UsersController {
       const { email, password } = req.body;
 
       if (!email) {
-        throw Error('이메일을 입력해주세요');
+        throw new CustomError('이메일을 입력해 주세요', 400);
       }
 
       if (!password) {
-        throw Error('비밀번호를 입력해주세요');
+        throw new CustomError('비밀번호를 입력해 주세요', 400);
       }
 
       const user = await this.usersService.signIn(req, email, password);
@@ -116,7 +120,7 @@ export class UsersController {
     try {
       const { userId } = req.user;
 
-      await this.usersService.deleteMyInfo(userId);
+      await this.usersService.deleteMyInfo(userId, res);
       return res.status(200).json({ message: '회원 탈퇴 완료' });
     } catch (error) {
       console.log(error);
