@@ -1,3 +1,4 @@
+import { CustomError } from '../middlewares/error.middleware.js';
 import { UsersService } from '../services/users.service.js';
 
 export class UsersController {
@@ -7,27 +8,30 @@ export class UsersController {
       const { email, password, confirmPassword, phone, address } = req.body;
 
       if (!email) {
-        throw Error('이메일을 입력해주세요');
+        throw new CustomError('이메일을 입력해 주세요', 400);
       }
 
       if (!password) {
-        throw Error('비밀번호를 입력해주세요');
+        throw new CustomError('비밀번호를 입력해 주세요', 400);
       }
 
       if (!confirmPassword) {
-        throw Error('비밀번호 확인을 입력해주세요');
+        throw new CustomError('비밀번호 확인을 입력해 주세요', 400);
       }
 
       if (!phone) {
-        throw Error('핸드폰 번호를 입력해주세요');
+        throw new CustomError('핸드폰 번호를 입력해 주세요', 400);
       }
 
       if (!address) {
-        throw Error('주소를 입력해주세요');
+        throw new CustomError('주소를 입력해주세요', 400);
       }
 
       if (password !== confirmPassword) {
-        throw Error('비밀번호와, 비밀번호 확인이 동일하지 않습니다.');
+        throw new CustomError(
+          '비밀번호와 비밀번호 확인이 일치하지 않습니다.',
+          400,
+        );
       }
 
       const newUser = await this.usersService.signUp(
@@ -58,11 +62,11 @@ export class UsersController {
       const { email, password } = req.body;
 
       if (!email) {
-        throw Error('이메일을 입력해주세요');
+        throw new CustomError('이메일을 입력해 주세요', 400);
       }
 
       if (!password) {
-        throw Error('비밀번호를 입력해주세요');
+        throw new CustomError('비밀번호를 입력해 주세요', 400);
       }
 
       const user = await this.usersService.signIn(req, email, password);
@@ -86,8 +90,38 @@ export class UsersController {
   getMyInfo = async (req, res, next) => {
     try {
       const user = req.user;
-      console.log(user);
       return res.status(200).json(user);
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  };
+
+  putMyInfo = async (req, res, next) => {
+    try {
+      const { userId } = req.user;
+      const { password, phone, imgUrl, address } = req.body;
+      await this.usersService.putMyInfo(
+        userId,
+        password,
+        phone,
+        imgUrl,
+        address,
+      );
+
+      return res.status(200).json({ message: '성공적으로 수정 되었습니다.' });
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  };
+
+  deleteMyInfo = async (req, res, next) => {
+    try {
+      const { userId } = req.user;
+
+      await this.usersService.deleteMyInfo(userId, res);
+      return res.status(200).json({ message: '회원 탈퇴 완료' });
     } catch (error) {
       console.log(error);
       next(error);
