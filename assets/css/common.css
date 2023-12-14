@@ -579,7 +579,7 @@ input::placeholder {
   bottom: 0;
   right: 0;
   background-color: rgba(0, 0, 0, 0.4);
-  z-index: 11;
+  z-index: 110;
   display: none;
 }
 .dr-popup-wrap {
@@ -641,7 +641,7 @@ input::placeholder {
   width: 100%;
   background: #fff;
   height: 90px;
-  z-index: 111;
+  z-index: 100;
   border-bottom: 1px solid #eee;
 }
 .header .header_wrap {

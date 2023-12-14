@@ -3,6 +3,22 @@ const headers = {
   'Content-Type': 'application/json',
 };
 
+const { token, requireLogin } = auth();
+
+document.addEventListener('DOMContentLoaded', async () => {
+  const user = await requireLogin();
+  document.getElementById('span-user-email').innerHTML = `EMAIL : ${user.email}`;
+  document.getElementById('span-user-phone').innerHTML = `PHONE : ${user.phone}`;
+  document.getElementById('span-user-address').innerHTML = `ADDRESS : ${user.address}`;
+
+  document.getElementById('span-appointment-date').innerHTML =
+    '예약 날짜';
+  document.getElementById('span-appointment-phone').innerHTML =
+    '예약 폰번호';
+  document.getElementById('span-appointment-address').innerHTML =
+    '예약 주소';
+});
+
 function getCookieValue(name) {
   const regex = new RegExp(`(^| )${name}=([^;]+)`);
   const match = document.cookie.match(regex);

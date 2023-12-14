@@ -1,7 +1,7 @@
 import express from 'express';
 import { ReviewsController } from '../controllers/reviews.controller.js';
 import { ReviewsService } from '../services/reviews.service.js';
-import { ReviewsRepository } from '../repositories/reviews.repositories.js';
+import { ReviewsRepository } from '../repositories/reviews.repository.js';
 import { prisma } from '../utils/prisma/index.js'
 import auth from '../middlewares/need-signin.middleware.js';
 
