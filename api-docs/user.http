@@ -7,13 +7,11 @@ POST {{host}}/signup
 Content-Type: application/json
 
 {
-  "name": "테스트",
-  "email": "test36@naver.com",
-  "password": "1231",
-  "confirmPassword": "1231",
-  "phone":"1231234",
+  "email": "abc@naver.com",
+  "password": "1234aa",
+  "confirmPassword": "1234aa",
+  "phone":"010-2121-2012",
   "address":"123123123/123123"
-
 }
 
 
@@ -22,9 +20,14 @@ POST {{host}}/signin
 Content-Type: application/json
 
 {
-  "email": "test36@naver.com",
-  "password": "123123"
+  "email": "abc@naver.com",
+  "password": "1234aa"
 }
+
+### Sign-Out
+GET {{host}}/signout
+Content-Type: application/json
+
 
 ### getMyInfo
 GET {{host/info}}
@@ -32,14 +35,16 @@ Content-Type: application/json
 
 
 ### UpdateMyInfo
-PUT {{host/info}}
+PUT {{host/info}} 
 Content-Type: application/json
+Set-Cookie: connect.sid=s%3AMVQhNtVmcr3z6xBJ3FD2Qb2HLd6H_QNP.SF15Jl8vWgdsVNGV8izGZHXyLTQudzoWxsvBb9oszUU; Path=/; Expires=Fri, 15 Dec 2023 04:09:40 GMT; HttpOnly
+
 {
-  "phone": "010-5939-2121", 
-  "address":"강남구 강남시 강남도"
+  "phone": "010-5929-2012", 
+  "address":"인천광역시/101동 1001호"
 }
 
 
-## DeleteMyInfo
+### DeleteMyInfo
 DELETE {{host/info}}
 Content-Type: application/json
