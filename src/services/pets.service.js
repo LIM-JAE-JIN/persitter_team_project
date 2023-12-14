@@ -1,3 +1,4 @@
+import { CustomError } from "../middlewares/error.middleware.js";
 import { PetsRepository } from "../repositories/pets.repository.js"
 
 
@@ -55,7 +56,7 @@ export class PetsService {
     updatePet = async (petId, petName, petAge, imgUrl, petCategory) => {
         const pet = await this.petsRepository.findPetById(petId);
 
-        if (!pet) throw new Error('펫이 존재하지 않습니다.');
+        if (!pet) throw new CustomError('펫이 존재하지 않습니다.', 404);
 
         await this.petsRepository.updatePet(petId, petName, petAge, imgUrl, petCategory);
 
@@ -75,7 +76,7 @@ export class PetsService {
     deletePet = async (petId) => {
         const pet = await this.petsRepository.findPetById(petId);
 
-        if(!pet) throw new Error ('펫이 존재하지 않습니다.');
+        if(!pet) throw new CustomError ('펫이 존재하지 않습니다.', 404);
 
         await this.petsRepository.deletePet(petId);
 

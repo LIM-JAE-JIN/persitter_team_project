@@ -1,5 +1,5 @@
 import { PetsService } from "../services/pets.service.js";
-
+import { CustomError } from "../middlewares/error.middleware.js";
 export class PetsController {
     petsService = new PetsService();
 
@@ -59,9 +59,8 @@ export class PetsController {
             const { petName, petAge, imgUrl, petCategory } = req.body;
 
 
-            if (!petId) {
-                return res.status(404).json({ message: "존재하지 않는 펫입니다." });
-            }
+            if (!petId) throw new CustomError('존재하지 않는 펫입니다.', 404);
+        
             const updatedPet = await this.petsService.updatePet(
                 petId, petName, petAge, imgUrl, petCategory
             )
@@ -87,9 +86,7 @@ export class PetsController {
         try {
             const { petId } = req.params;
 
-            if (!petId) {
-                return res.status(404).json({ message: "존재하지 않는 펫입니다." });
-            }
+            if (!petId) throw new CustomError('존재하지 않는 펫입니다.',404);
 
             const deletedPet = await this.petsService.deletePet(petId);
 
