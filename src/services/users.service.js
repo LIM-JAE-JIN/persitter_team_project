@@ -18,7 +18,7 @@ export class UsersService {
       throw new CustomError('이미 사용중인 핸드폰 입니다.', 400);
     }
 
-    const salt = process.env.HASH_SALT_ROUDS;
+    const salt = process.env.HASH_SALT_ROUNDS;
     const bcryptPassword = bcrypt.hashSync(password, +salt);
 
     const newUser = await this.usersRepository.signUp(
