@@ -38,7 +38,7 @@ export class ReviewsRepository {
   getReviews = async (sitterId) => {
     const data = await this.prisma.Reviews.findMany({
       where: { sitterId: +sitterId },
-      include: { USers: { select: { email: true } } }
+      include: { Users: { select: { email: true } } }
     })
 
     return data;

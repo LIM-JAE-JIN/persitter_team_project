@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import express from 'express';
 import { ReviewsController } from '../controllers/reviews.controller.js';
 import { ReviewsService } from '../services/reviews.service.js';
 import { ReviewsRepository } from '../repositories/reviews.repositories.js';
@@ -9,7 +9,7 @@ const reviewsRepository = new ReviewsRepository(prisma);
 const reviewsService = new ReviewsService(reviewsRepository);
 const reviewsController = new ReviewsController(reviewsService);
 
-const reviewsRouter = Router();
+const reviewsRouter = express.Router();
 
 // 리뷰 생성
 reviewsRouter.post('/:sitterId', auth, reviewsController.createReview);
