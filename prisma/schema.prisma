@@ -50,13 +50,13 @@ model Appointments{
   appointmentId    Int            @id @default(autoincrement()) @map("appointmentId")
   sitterId         Int            @map("sitterId")
   userId           Int            @map("userId")
-  date             DateTime       @db.Date
-  pets             String         
+  date             String
+  pets             String 
+  phone            String        
   address          String
   significant      String  
   createdAt        DateTime       @default(now())               @map("createdAt")
-  updatedAt        DateTime       @updatedAt @default(now())    @map("updatedAt")
-  Reviews          Reviews?     
+  updatedAt        DateTime       @updatedAt @default(now())    @map("updatedAt")    
   Users            Users          @relation(fields: [userId], references: [userId], onDelete:Cascade)
   PetSitters       PetSitters     @relation(fields: [sitterId], references: [sitterId], onDelete:Cascade)
  
@@ -84,7 +84,6 @@ model PetSitters{
 
 model Reviews{
   reviewId         Int            @id @default(autoincrement()) @map("reviewId")
-  appointmentId    Int            @unique @map("appointmentId")
   userId           Int            @map("userId")
   sitterId         Int            @map("sitterId")
   content          String
@@ -92,7 +91,6 @@ model Reviews{
   createdAt        DateTime       @default(now())               @map("createdAt")
   updatedAt        DateTime       @updatedAt @default(now())    @map("updatedAt")
   Users            Users          @relation(fields: [userId], references: [userId], onDelete:Cascade)
-  Appointments     Appointments   @relation(fields: [appointmentId], references: [appointmentId], onDelete:Cascade)
   PetSitters       PetSitters     @relation(fields: [sitterId], references: [sitterId], onDelete:Cascade)
 
 
