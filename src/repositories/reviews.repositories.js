@@ -4,7 +4,7 @@ export class ReviewsRepository {
   }
 
   appointmentChk = async (userId, sitterId) => {
-    const data = await this.prisma.Appointments.findUnique({
+    const data = await this.prisma.Appointments.findFirst({
       where: {
         userId: +userId,
         sitterId: +sitterId
@@ -15,8 +15,16 @@ export class ReviewsRepository {
   }
 
   createReview = async (sitterId, userId, content, rating) => {
+    const appointment = await this.prisma.Appointments.findFirst({
+      where: {
+        userId: +userId,
+        sitterId: +sitterId
+      }
+    })
+
     const data = await this.prisma.Reviews.create({
       data: {
+        appointmentId: appointment.appointmentId,
         sitterId,
         userId,
         content,
