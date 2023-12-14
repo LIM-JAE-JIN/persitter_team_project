@@ -16,3 +16,42 @@ $(document).ready(function () {
   // 3초마다 이미지 변경 함수를 호출합니다.
   setInterval(changeImage, 3000);
 });
+
+const getSitters = async () => {
+  // 백엔드 조회 api 가져오기
+  const response = await fetch(`http://localhost:3000/api/petsitter`);
+  const responsetData = await response.json();
+  const sitters = responsetData.data;
+
+  makeCard(sitters);
+};
+
+getSitters();
+
+const makeCard = (sitters) => {
+  const listWrap = document.getElementById('sitterWrap');
+  listWrap.innerHTML = sitters
+    .map(
+      (sitter) => `
+      <li>
+      <div class="card">
+        <img
+          src=${sitter.imgUrl}
+          class="card-img-top"
+          alt="..."
+        />
+        <div class="card-body">
+          <h5 class="card-title" style="font-size: 16px">${sitter.name}</h5>
+          <p class="card-text" style="margin-bottom: 10px; font-size: 13px">
+            ${sitter.introduce}
+            <br />
+            <br />
+            펫시터 경력 : ${sitter.career}
+          </p>
+          <a href="/page/sitterDetail.html?sitter=${sitter.sitterId}" class="btn btn-primary right">자세히 보기</a>
+        </div>
+      </div>
+    </li>`,
+    )
+    .join('');
+};

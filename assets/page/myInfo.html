@@ -5,95 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/css/common.css" />
+    <link rel="stylesheet" href="/css/myInfo.css" />
     <script type="module" src="/js/jquery-3.6.3.min.js"></script>
     <script type="module" src="/js/common.js"></script>
+    <script type="module" src="/js/myInfo.js"></script>
     <title>F4Sitter</title>
-    <script src="/js/myInfo.js"></script>
-    <script>
-      const { token, requireLogin } = auth();
-    </script>
+    <script></script>
   </head>
 
   <body>
-    <!-- 헤더 s -->
-    <header class="header">
-      <div
-        class="dr-container header_wrap d-flex justify-content-start align-items-center"
-      >
-        <h2>
-          <a href="/page/main.html"> F4 SITTER </a>
-        </h2>
-        <!-- 2023-10-11 h2태그로 변경 -->
-        <div class="d-flex w-100 align-items-center">
-          <ul class="dr-hd-log justify-content-end w-100">
-            <li>
-              <!-- 로그인 시 s -->
-              <div class="dr-user-on dr-user-off">
-                <a href="#none">마이페이지</a>
-                <a href="#none">로그아웃</a>
-              </div>
-              <!-- 로그인 시 e -->
-            </li>
-          </ul>
-        </div>
-        <div
-          class="dr-user-menu justify-content-end"
-          onclick="drPopupOpen('.dr-hd-m-menu')"
-        >
-          <img src="../../img/icon/icon_hambuger.png" alt="menu-icon" />
-        </div>
-      </div>
-    </header>
-    <div class="dr-header-box"></div>
-    <!-- 헤더 e -->
-
-    <!--내정보  -->
-    <div class="row">
-      <div class="card" style="width: 18rem">
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item"><span id="span-user-email"></span></li>
-          <li class="list-group-item"><span id="span-user-phone"></span></li>
-          <li class="list-group-item"><span id="span-user-address"></span></li>
-        </ul>
-      </div>
-      <div>
-        <button
-          class="dr-button"
-          onclick="drPopupOpen('.dr-popup-edit-member')"
-        >
-          수정하기
-        </button>
-        <button>탈퇴하기</button>
-      </div>
-    </div>
-
-    <div>
-      <h1>내 예약</h1>
-      <div>
-        <div class="card" style="width: 18rem">
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item">
-              <span id="span-appointment-date"></span>
-            </li>
-            <li class="list-group-item">
-              <span id="span-appointment-phone"></span>
-            </li>
-            <li class="list-group-item">
-              <span id="span-appointment-address"></span>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div>
-        <button>예약 취소</button>
-      </div>
-    </div>
-
-    <div>
-      <h1>내 펫 정보</h1>
-      <div class="user-pet"></div>
-    </div>
-
     <!-- 프로필 수정 팝업 s -->
     <div class="dr-dim"></div>
     <div class="dr-popup-wrap dr-popup-edit-member" style="width: 640px">
@@ -210,20 +130,164 @@
     </div>
     <!-- 게시글 생성 팝업 e -->
 
-    <script>
-      document.addEventListener('DOMContentLoaded', async () => {
-        const user = await requireLogin();
-        document.getElementById('span-user-email').innerHTML = user.email;
-        document.getElementById('span-user-phone').innerHTML = user.phone;
-        document.getElementById('span-user-address').innerHTML = user.address;
+    <!-- 헤더 s -->
+    <header class="header">
+      <div
+        class="dr-container header_wrap d-flex justify-content-start align-items-center"
+      >
+        <h2>
+          <a href="/page/main.html"> F4 SITTER </a>
+        </h2>
+        <!-- 2023-10-11 h2태그로 변경 -->
+        <div class="d-flex w-100 align-items-center">
+          <ul class="dr-hd-log justify-content-end w-100">
+            <li>
+              <!-- 로그인 시 s -->
+              <div class="dr-user-on dr-user-off">
+                <a href="#none">마이페이지</a>
+                <a href="#none">로그아웃</a>
+              </div>
+              <!-- 로그인 시 e -->
+            </li>
+          </ul>
+        </div>
+        <div
+          class="dr-user-menu justify-content-end"
+          onclick="drPopupOpen('.dr-hd-m-menu')"
+        >
+          <img src="../../img/icon/icon_hambuger.png" alt="menu-icon" />
+        </div>
+      </div>
+    </header>
+    <div class="dr-header-box"></div>
+    <!-- 헤더 e -->
 
-        document.getElementById('span-appointment-date').innerHTML =
-          '예약 날짜';
-        document.getElementById('span-appointment-phone').innerHTML =
-          '예약 폰번호';
-        document.getElementById('span-appointment-address').innerHTML =
-          '예약 주소';
-      });
-    </script>
+    <!--내정보  -->
+    <section style="max-width: 1200px; margin: 60px auto 0">
+      <div class="card">
+        <div
+          class="card-header"
+          style="font-size: 18px; padding: 11px 0 11px 10px; font-weight: bold"
+        >
+          내 프로필 정보
+        </div>
+        <div class="card-body">
+          <h5
+            class="card-title"
+            id="span-user-email"
+            style="font-size: 15px"
+          ></h5>
+          <h5
+            class="card-title"
+            id="span-user-phone"
+            style="font-size: 15px"
+          ></h5>
+          <h5
+            class="card-title"
+            id="span-user-address"
+            style="font-size: 15px"
+          ></h5>
+          <a
+            href="javascript:void(0);"
+            class="btn btn-primary"
+            style="float: right; margin-left: 5px"
+            >탈퇴하기</a
+          >
+          <a
+            href="javascript:void(0);"
+            class="btn btn-primary"
+            onclick="drPopupOpen('.dr-popup-edit-member')"
+            style="float: right"
+            >내 프로필 수정</a
+          >
+        </div>
+      </div>
+
+      <div style="margin-top: 50px">
+        <h1 style="font-weight: bold; margin-bottom: 20px">내 예약 목록</h1>
+        <ul>
+          <li>
+            <div class="card">
+              <h5 class="card-header">Featured</h5>
+              <div class="card-body">
+                <h5 class="card-title">Special title treatment</h5>
+                <p class="card-text">
+                  With supporting text below as a natural lead-in to additional
+                  content.
+                </p>
+                <a href="#" class="btn btn-primary" style="float: right"
+                  >예약 취소</a
+                >
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div
+        style="
+          display: flex;
+          width: 100%;
+          justify-content: space-between;
+          margin: 50px 0 20px;
+          align-items: center;
+        "
+      >
+        <h1 style="font-weight: bold">내 펫 목록</h1>
+        <button type="button" class="btn btn-primary">펫 등록</button>
+      </div>
+      <ul class="petWrap" id="petWrap">
+        <li>
+          <div class="card">
+            <img src="/images/huchu.jpg" class="card-img-top" alt="..." />
+            <div class="card-body">
+              <h5 class="card-title">후추</h5>
+              <p class="card-text">4살</p>
+              <a href="#" class="btn btn-primary" style="margin-top: 10px"
+                >삭제</a
+              >
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="card">
+            <img src="/images/bbangbaong.jpg" class="card-img-top" alt="..." />
+            <div class="card-body">
+              <h5 class="card-title">빵바옹</h5>
+              <p class="card-text">25살</p>
+              <a href="#" class="btn btn-primary" style="margin-top: 10px"
+                >삭제</a
+              >
+            </div>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <!-- footer s -->
+    <footer class="dr-container">
+      <div class="dr-footer-wrap row">
+        <div class="col-md-2">
+          <div class="dr-footer-logo">
+            <a href="#none" class="dr-fz-20"> F4 SITTER </a>
+          </div>
+        </div>
+        <div class="col-md-5 dr-fz-14 mt-md-0 dr-footer-adress">
+          <div>
+            <b class="me-3">(주) F4SITTER</b
+            ><span>(12345) 서울특별시 관악</span>
+          </div>
+          <div class="mt-3">
+            <b class="me-2">Email.</b><span>f4@sitter.com</span>
+          </div>
+        </div>
+        <div class="col-md-5 text-md-end mt-md-0 dr-footer-terms dr-fw-500">
+          <div class="dr-copy-right mt-3">
+            Copyright ©2023 f4sitter Inc. All right reserved.
+          </div>
+        </div>
+      </div>
+    </footer>
+    <!-- footer -->
   </body>
 </html>

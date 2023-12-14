@@ -1,0 +1,16 @@
+.petWrap {
+  display: flex;
+}
+.petWrap li {
+  width: 23.5%;
+  margin-right: 2%;
+}
+.petWrap li:nth-child(4n) {
+  margin-right: 0;
+}
+
+/* 이미지 맞추기 */
+.petWrap li .card img {
+  height: 320px;
+  object-fit: cover;
+}
