@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/common.css" />
+    <script type="module" src="/js/jquery-3.6.3.min.js"></script>
+    <script type="module" src="/js/common.js"></script>
+    <title>F4Sitter</title>
+    <script src="/js/myInfo.js"></script>
+    <script>
+      const { token, requireLogin } = auth();
+    </script>
+  </head>
+
+  <body>
+    <!-- 헤더 s -->
+    <header class="header">
+      <div
+        class="dr-container header_wrap d-flex justify-content-start align-items-center"
+      >
+        <h2>
+          <a href="/page/main.html"> F4 SITTER </a>
+        </h2>
+        <!-- 2023-10-11 h2태그로 변경 -->
+        <div class="d-flex w-100 align-items-center">
+          <ul class="dr-hd-log justify-content-end w-100">
+            <li>
+              <!-- 로그인 시 s -->
+              <div class="dr-user-on dr-user-off">
+                <a href="#none">마이페이지</a>
+                <a href="#none">로그아웃</a>
+              </div>
+              <!-- 로그인 시 e -->
+            </li>
+          </ul>
+        </div>
+        <div
+          class="dr-user-menu justify-content-end"
+          onclick="drPopupOpen('.dr-hd-m-menu')"
+        >
+          <img src="../../img/icon/icon_hambuger.png" alt="menu-icon" />
+        </div>
+      </div>
+    </header>
+    <div class="dr-header-box"></div>
+    <!-- 헤더 e -->
+
+    <!--내정보  -->
+    <div class="row">
+      <div class="card" style="width: 18rem">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item"><span id="span-user-email"></span></li>
+          <li class="list-group-item"><span id="span-user-phone"></span></li>
+          <li class="list-group-item"><span id="span-user-address"></span></li>
+        </ul>
+      </div>
+      <div>
+        <button
+          class="dr-button"
+          onclick="drPopupOpen('.dr-popup-edit-member')"
+        >
+          수정하기
+        </button>
+        <button>탈퇴하기</button>
+      </div>
+    </div>
+
+    <div>
+      <h1>내 예약</h1>
+      <div>
+        <div class="card" style="width: 18rem">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <span id="span-appointment-date"></span>
+            </li>
+            <li class="list-group-item">
+              <span id="span-appointment-phone"></span>
+            </li>
+            <li class="list-group-item">
+              <span id="span-appointment-address"></span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <button>예약 취소</button>
+      </div>
+    </div>
+
+    <div>
+      <h1>내 펫 정보</h1>
+      <div class="user-pet"></div>
+    </div>
+
+    <!-- 프로필 수정 팝업 s -->
+    <div class="dr-dim"></div>
+    <div class="dr-popup-wrap dr-popup-edit-member" style="width: 640px">
+      <header style="background-color: transparent">
+        <h1>내 프로필 수정</h1>
+      </header>
+      <div class="dr-popup-content">
+        <div class="mb-5 dr-input-wrap">
+          <input
+            type="text"
+            class="dr-input"
+            id="userPassword"
+            name="userPassword"
+            placeholder="변경할 비밀번호를 입력해주세요"
+          />
+        </div>
+        <div class="mb-5 dr-input-wrap">
+          <input
+            type="text"
+            class="dr-input"
+            id="userPhone"
+            name="userPhone"
+            placeholder="변경할 핸드폰 번호를 입력해주세요."
+          />
+        </div>
+        <div class="mb-5 dr-input-wrap">
+          <input
+            type="password"
+            class="dr-input"
+            id="userAddress"
+            name="userAddress"
+            placeholder="변경할 주소를 입력해주세요."
+          />
+        </div>
+      </div>
+      <footer>
+        <div class="d-flex justify-content-between dr-bg-white">
+          <a
+            href="#none"
+            class="dr-button"
+            onclick="drPopupClose(this)"
+            style="background-color: #ff9a69; color: #fff; border: 0"
+            >취소</a
+          >
+          <a
+            href="#none"
+            class="dr-button"
+            id="editBtn"
+            onclick="drPopupClose(this)"
+            style="background-color: #623c35; color: #fff; border: 0"
+            >수정하기</a
+          >
+        </div>
+      </footer>
+    </div>
+    <!-- 프로필 수정 팝업 e -->
+
+    <!-- 게시글 생성 팝업 s -->
+    <div class="dr-dim"></div>
+    <div
+      id="post_modal"
+      class="dr-popup-wrap dr-popup-create-post"
+      style="width: 640px"
+    >
+      <div id="post_content">
+        <header style="background-color: transparent">
+          <h1>게시글 생성</h1>
+        </header>
+        <div class="dr-popup-content">
+          <div class="mb-5 dr-input-wrap">
+            <input
+              type="text"
+              class="dr-input"
+              id="post_title"
+              name="post_title"
+              placeholder="게시글 제목을 입력해주세요."
+            />
+          </div>
+          <div class="mb-5 dr-input-wrap">
+            <input
+              type="text"
+              class="dr-input"
+              id="post_body"
+              name="post_body"
+              placeholder="게시글 내용을 입력해주세요."
+            />
+          </div>
+          <div class="mb-5 dr-input-wrap">
+            <label for="post_genre">장르:</label>
+            <select name="post_genre" id="post_genre"></select>
+          </div>
+        </div>
+        <footer>
+          <div class="d-flex justify-content-between dr-bg-white">
+            <a
+              href="#none"
+              class="dr-button"
+              id="cancel_btn"
+              onclick="drPopupClose(this)"
+              style="background-color: #ff9a69; color: #fff; border: 0"
+              >취소</a
+            >
+            <a
+              href="#none"
+              class="dr-button"
+              id="create_btn"
+              onclick="drPopupClose(this)"
+              style="background-color: #623c35; color: #fff; border: 0"
+              >생성하기</a
+            >
+          </div>
+        </footer>
+      </div>
+    </div>
+    <!-- 게시글 생성 팝업 e -->
+
+    <script>
+      document.addEventListener('DOMContentLoaded', async () => {
+        const user = await requireLogin();
+        document.getElementById('span-user-email').innerHTML = user.email;
+        document.getElementById('span-user-phone').innerHTML = user.phone;
+        document.getElementById('span-user-address').innerHTML = user.address;
+
+        document.getElementById('span-appointment-date').innerHTML =
+          '예약 날짜';
+        document.getElementById('span-appointment-phone').innerHTML =
+          '예약 폰번호';
+        document.getElementById('span-appointment-address').innerHTML =
+          '예약 주소';
+      });
+    </script>
+  </body>
+</html>
