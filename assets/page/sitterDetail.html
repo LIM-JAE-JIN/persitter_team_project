@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/common.css" />
+    <link rel="stylesheet" href="/css/sitterDetail.css" />
+    <script type="module" src="/js/jquery-3.6.3.min.js"></script>
+    <script type="module" src="/js/common.js"></script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <!-- 메인에서 클릭한 사람의 이름 -->
+    <title></title>
+  </head>
+  <body>
+    <!-- 게시글 생성 팝업 s -->
+    <div class="dr-dim">
+      <div
+        id="appointment_modal"
+        class="dr-popup-wrap sitter-popup-appointment"
+        style="width: 640px"
+      >
+        <div id="post_content">
+          <header style="background-color: transparent">
+            <h1>예약하기</h1>
+          </header>
+          <div class="dr-popup-content">
+            <div class="mb-5 dr-input-wrap">
+              <label for="selectSitter">F4</label>
+              <select
+                class="form-select form-select-lg mb-3"
+                aria-label="Floating label select example"
+                id="selectSitter"
+              >
+                <option value="한승준">한승준</option>
+                <option value="이낙규">이낙규</option>
+                <option value="임재진">임재진</option>
+                <option value="하정현">하정현</option>
+              </select>
+            </div>
+            <div class="mb-5 dr-input-wrap">
+              <label for="post_genre">My Pet`s</label>
+              <select
+                class="form-select form-select-lg mb-3"
+                aria-label="Floating label select example"
+                id="selectPets"
+              >
+                <option value="고양이">고양이</option>
+                <option value="냥이">냥이</option>
+                <option value="양이">양이</option>
+                <option value="이">이</option>
+              </select>
+            </div>
+            <div class="mb-5 dr-input-wrap">
+              <input type="date" class="dr-input" />
+            </div>
+            <div class="mb-5 dr-input-wrap">
+              <input
+                type="text"
+                class="dr-input"
+                placeholder="전화번호를 입력해주세요."
+              />
+            </div>
+            <div class="mb-5 dr-input-wrap">
+              <input
+                type="text"
+                id="sample6_address"
+                class="dr-input"
+                placeholder="주소"
+              /><br />
+              <input
+                type="text"
+                id="sample6_detailAddress"
+                class="dr-input"
+                placeholder="상세주소"
+              /><br />
+              <input
+                type="button"
+                onclick="sample6_execDaumPostcode()"
+                class="dr-input"
+                value="주소 찾기"
+              />
+            </div>
+            <div class="mb-5 dr-input-wrap">
+              <input
+                type="text"
+                class="dr-input"
+                placeholder="특이사항을 입력해주세요"
+              />
+            </div>
+          </div>
+          <footer>
+            <div class="d-flex justify-content-between dr-bg-white">
+              <a
+                href="#none"
+                class="dr-button"
+                id="create_btn"
+                onclick="drPopupClose(this)"
+                style="background-color: #623c35; color: #fff; border: 0"
+                >예약하기</a
+              >
+              <a
+                href="#none"
+                class="dr-button"
+                id="cancel_btn"
+                onclick="drPopupClose(this)"
+                style="background-color: #ff9a69; color: #fff; border: 0"
+                >취소</a
+              >
+            </div>
+          </footer>
+        </div>
+      </div>
+    </div>
+
+    <!-- 게시글 생성 팝업 e -->
+    <!-- header s -->
+    <header class="header">
+      <div
+        class="dr-container header_wrap d-flex justify-content-start align-items-center"
+      >
+        <h2>
+          <a href="/page/main.html"> F4 SITTER </a>
+        </h2>
+        <div class="d-flex w-100 align-items-center">
+          <ul class="dr-hd-log justify-content-end w-100">
+            <li>
+              <div
+                class="dr-user-off d-flex"
+                id="loginTab"
+                style="display: none"
+              >
+                <a href="/page/login.html">로그인</a>
+                <a href="/page/join.html">회원가입</a>
+              </div>
+              <div
+                class="dr-user-on dr-user-off"
+                id="logoutTab"
+                style="display: none"
+              >
+                <a href="#none">마이페이지</a>
+                <a href="#none">로그아웃</a>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </header>
+    <div class="dr-header-box"></div>
+    <!-- header e -->
+
+    <!-- 배경 이미지 -->
+    <div class="sitter-container">
+      <div class="sitter-main">
+        <img
+          src="https://i.namu.wiki/i/Ubu08rEDKxjKdcKCjJXX_vnAU-j7xF2LvekkNnTyg6Ri5wtC3pMcPfAixvvNqB6snIWLkTr9_kn1_Q9SpY1xJBk6RkLy92Unrl7S5kHbg-L9Oywgxt6brOXw7catZ4Y_5xT_tW5lr-DVmWZTaFcnCA.webp"
+          alt=""
+        />
+      </div>
+    </div>
+    <!-- 배경 이미지 -->
+
+    <!-- 경력 -->
+    <div class="career-container">
+      <div class="sitter-profile">
+        <img
+          src="https://spnimage.edaily.co.kr/images/Photo/files/NP/P/2009/02/PP09020500087.JPG"
+          alt=""
+          width="150"
+        />
+      </div>
+      <div class="sitter-career-list">
+        <li>12년</li>
+        <li>집사생활 4년</li>
+      </div>
+      <div class="sitter-appointment-btn">
+        <button onclick="drPopupOpen(appointment_modal)">예약하기</button>
+      </div>
+    </div>
+    <!-- 경력 -->
+
+    <!-- 리뷰 -->
+    <div class="review-container">
+      <div class="review-create">
+        <div class="review-submitForm">
+          <form
+            class="row justify-content-center review-form"
+            method="POST"
+            action="/api/review/15"
+          >
+            <input
+              type="text"
+              class="review-input form-control form-control-sm col-sm-9"
+              placeholder="내용을 입력하시오"
+              name="content"
+            />
+            <button
+              type="submit"
+              class="btn btn-secondary btn-sm review-btn col-sm-2"
+            >
+              review
+            </button>
+          </form>
+        </div>
+      </div>
+      <div class="review-list">
+        <div class="review-list">
+          <li class="reviews">
+            <p>
+              <img
+                src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                alt=""
+              />
+              <span style="font-weight: bold">123123@naver.com</span>
+            </p>
+            <p class="review-content">asasdasdasdasdd</p>
+            <div class="review-btnFD">
+              <p class="review-createdAt">
+                Thu Dec 14 2023 13:32:58 GMT+0900 (대한민국 표준시)
+              </p>
+            </div>
+          </li>
+        </div>
+      </div>
+    </div>
+    <!-- 리뷰 -->
+
+    <!-- footer s -->
+    <footer class="dr-container">
+      <div class="dr-footer-wrap row">
+        <div class="col-md-2">
+          <div class="dr-footer-logo">
+            <a href="#none" class="dr-fz-20"> F4 SITTER </a>
+          </div>
+        </div>
+        <div class="col-md-5 dr-fz-14 mt-md-0 dr-footer-adress">
+          <div>
+            <b class="me-3">(주) F4SITTER</b
+            ><span>(12345) 서울특별시 관악</span>
+          </div>
+          <div class="mt-3">
+            <b class="me-2">Email.</b><span>f4@sitter.com</span>
+          </div>
+        </div>
+        <div class="col-md-5 text-md-end mt-md-0 dr-footer-terms dr-fw-500">
+          <div class="dr-copy-right mt-3">
+            Copyright ©2023 f4sitter Inc. All right reserved.
+          </div>
+        </div>
+      </div>
+    </footer>
+    <!-- footer -->
+
+    <script></script>
+  </body>
+</html>

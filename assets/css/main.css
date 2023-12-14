@@ -1,0 +1,44 @@
+.opacity-100 {
+  position: absolute;
+  right: 0;
+  max-width: 1440px;
+  height: 770px;
+  transition-property: opacity;
+  transition-duration: 2s;
+  opacity: 1;
+}
+
+.transition-opacity-0 {
+  position: absolute;
+  right: 0;
+  max-width: 1440px;
+  height: 770px;
+  transition-property: opacity;
+  transition-duration: 2s;
+  opacity: 0;
+}
+
+.sitters {
+  max-width: 1200px;
+  margin: 120px auto 0;
+}
+.sitters h2 {
+  font-size: 32px;
+  font-weight: bold;
+  letter-spacing: -2px;
+  margin-bottom: 40px;
+}
+.sitters ul {
+  display: flex;
+}
+.sitters ul li {
+  width: 23.5%;
+  margin-right: 2%;
+}
+.sitters ul li:last-child {
+  margin-right: 0;
+}
+.sitters ul li .card img {
+  height: 380px;
+  object-fit: cover;
+}

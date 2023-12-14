@@ -1,0 +1,108 @@
+.sitter-container {
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+  background-color: papayawhip;
+}
+.sitter-main {
+  text-align: center;
+}
+.sitter-main img {
+  align-items: center;
+}
+
+/* 시터 프로필 및 경력 */
+.career-container {
+  /* background-color: aquamarine; */
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  align-items: center;
+}
+.sitter-profile img {
+  border-radius: 50%;
+  width: 200px;
+}
+.sitter-career-list {
+  display: flex;
+  flex-direction: column;
+  margin-left: 30px;
+  margin-right: 10px;
+  width: 900px;
+}
+
+.sitter-appointment-btn {
+  width: 100px;
+}
+
+/* 시터 프로필 및 경력 */
+
+/* == 코멘트 작성 */
+.review-container {
+  /* background-color: #623c35; */
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.review-form {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  vertical-align: middle;
+  align-items: center;
+  justify-content: flex-end;
+  padding-top: 40px;
+}
+.review-submit {
+  display: flex;
+  vertical-align: middle;
+  align-items: center;
+  justify-content: center;
+}
+
+.review-input {
+  height: 60px;
+  width: 70%;
+}
+.review-btn {
+  width: 10%;
+  margin-left: 16px;
+}
+/* == 코멘트 작성 */
+
+/* ==코멘트 리스트 */
+.review-list {
+  margin-top: 48px;
+  margin-bottom: 40px;
+}
+.reviews {
+  border: dotted #d1ccdc;
+  border-width: 1px 0;
+  border-radius: 0;
+  padding: 5px;
+  margin: 5;
+}
+.review-content {
+  margin: 0 32px 0 32px;
+}
+.review-createdAt {
+  font-size: small;
+  opacity: 40%;
+  text-align: right;
+}
+#review-btnFD {
+  text-align: right;
+  margin-left: 32px;
+}
+.reviews img {
+  border-radius: 50%;
+  width: 50px;
+}
+/* ==코멘트 리스트 */

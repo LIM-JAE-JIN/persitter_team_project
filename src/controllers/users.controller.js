@@ -87,6 +87,15 @@ export class UsersController {
     }
   };
 
+  signOut = async (rqe, res, next) => {
+    try {
+      res.clearCookie('connect.sid');
+      return res.status(200).json({ message: '로그아웃 되었습니다.' });
+    } catch (error) {
+      next(error);
+    }
+  };
+
   getMyInfo = async (req, res, next) => {
     try {
       const user = req.user;

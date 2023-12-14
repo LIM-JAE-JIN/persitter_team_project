@@ -1,26 +1,50 @@
+@host = http://localhost:3000/api/users
+@host/info = http://localhost:3000/api/users/me
+
+
 ### Sign-Up
-POST http://localhost:3000/api/users/signup 
+POST {{host}}/signup 
 Content-Type: application/json
 
 {
-  "name": "테스트",
-  "email": "test36@naver.com",
-  "password": "123123",
-  "confirmPassword": "123123",
-  "phone":"1231234",
+  "email": "abc@naver.com",
+  "password": "1234aa",
+  "confirmPassword": "1234aa",
+  "phone":"010-2121-2012",
   "address":"123123123/123123"
-
 }
 
 
 ### Sign-In
-POST http://localhost:3000/api/users/signin HTTP/1.1
+POST {{host}}/signin
 Content-Type: application/json
 
 {
-  "email": "test36@naver.com",
-  "password": "123123"
+  "email": "test@naver.com",
+  "password": "test123"
 }
 
+### Sign-Out
+GET {{host}}/signout
+Content-Type: application/json
+
+
 ### getMyInfo
-GET http://localhost:3000/api/users/me HTTP/1.1
+GET {{host/info}}
+Content-Type: application/json
+
+
+### UpdateMyInfo
+PUT {{host/info}} 
+Content-Type: application/json
+Set-Cookie: connect.sid=s%3A-moh8iDpqMRDbIV1_Gl7-LG54wjNHmoa.VmD9Kl7e3pruXYgHmGzhntwr6vq5SRFplOP7%2FcCgupY; Path=/; Expires=Fri, 15 Dec 2023 08:17:09 GMT; HttpOnly
+
+{
+  "phone": "010-5929-2012", 
+  "address":"인천광역시/101동 1001호"
+}
+
+
+### DeleteMyInfo
+DELETE {{host/info}}
+Content-Type: application/json

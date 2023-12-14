@@ -40,11 +40,23 @@ export class AppointmentsService {
     address,
     significant,
   ) => {
+    const findSitter = await this.appointmentsRepository.getSitterByName(
+      sitterName,
+    );
+    if (!findSitter) {
+      throw new CustomError('존재하지 않는 시터입니다', 404);
+    }
+    const findAppointment = await this.appointmentsRepository.checkAppointment(
+      findSitter.sitterId,
+      date,
+    );
+    if (findAppointment) {
+      throw new CustomError('해당한 날짜에 예약이 이미 존재합니다', 409);
+    }
     const createdAppointment =
       await this.appointmentsRepository.createAppointment(
         userId,
-        email,
-        sitterName,
+        findSitter.sitterId,
         pets,
         date,
         phone,
@@ -66,6 +78,15 @@ export class AppointmentsService {
   };
 
   deleteAppointment = async (userId, appointmentId) => {
+    const appointment = await this.appointmentsRepository.getAppointmentById(
+      appointmentId,
+    );
+    if (!appointment) {
+      throw new CustomError('예약정보가 없습니다', 404);
+    }
+    if (appointment.userId !== userId) {
+      throw new CustomError('삭제할 권한이 없습니다', 403);
+    }
     const deletedAppointment =
       await this.appointmentsRepository.deleteAppointment(
         userId,
