@@ -1,5 +1,9 @@
+@host = http://localhost:3000/api/users
+@host/info = http://localhost:3000/api/users/me
+
+
 ### Sign-Up
-POST http://localhost:3000/api/users/signup 
+POST {{host}}/signup 
 Content-Type: application/json
 
 {
@@ -14,7 +18,7 @@ Content-Type: application/json
 
 
 ### Sign-In
-POST http://localhost:3000/api/users/signin HTTP/1.1
+POST {{host}}/signin
 Content-Type: application/json
 
 {
@@ -23,4 +27,19 @@ Content-Type: application/json
 }
 
 ### getMyInfo
-GET http://localhost:3000/api/users/me HTTP/1.1
+GET {{host/info}}
+Content-Type: application/json
+
+
+### UpdateMyInfo
+PUT {{host}}
+Content-Type: application/json
+{
+  "phone": "010-5939-2121", 
+  "address":"강남구 강남시 강남도"
+}
+
+
+## DeleteMyInfo
+DELETE {{host}} 
+Content-Type: application/json
