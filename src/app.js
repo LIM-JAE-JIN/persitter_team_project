@@ -5,8 +5,10 @@ import expressSession from 'express-session';
 import expressMySQLSession from 'express-mysql-session';
 import cookieParser from 'cookie-parser';
 import errorHandling from './middlewares/error.middleware.js';
+import cors from 'cors';
 
 const app = express();
+
 
 // MySQLStore를 Express-Session을 이용해 생성합니다.
 const MySQLStore = expressMySQLSession(expressSession);
@@ -21,6 +23,7 @@ const sessionStore = new MySQLStore({
   createDatabaseTable: true, // 세션 테이블을 자동으로 생성합니다.
 });
 
+app.use(cors())
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
