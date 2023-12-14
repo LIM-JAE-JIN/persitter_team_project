@@ -14,7 +14,7 @@ export class ReviewsRepository {
     return data;
   }
 
-  createReview = async (sitterId, userId, content, rating) => {
+  createReview = async (sitterId, userId, content, raiting) => {
     const appointment = await this.prisma.Appointments.findFirst({
       where: {
         userId: +userId,
@@ -24,11 +24,10 @@ export class ReviewsRepository {
 
     const data = await this.prisma.Reviews.create({
       data: {
-        appointmentId: appointment.appointmentId,
-        sitterId,
+        sitterId: +sitterId,
         userId,
         content,
-        rating
+        raiting
       }
     })
 
@@ -44,20 +43,31 @@ export class ReviewsRepository {
     return data;
   }
 
-  updateReview = async (sitterId, reviewId, userId, content, rating) => {
+  getReview = async (sitterId, reviewId) => {
+    const data = await this.prisma.Reviews.findFirst({
+      where: {
+        sitterId: +sitterId,
+        reviewId: +reviewId
+      }
+    })
+
+    return data;
+  }
+
+  updateReview = async (sitterId, reviewId, userId, content, raiting) => {
     const data = await this.prisma.Reviews.update({
       where: {
         sitterId: +sitterId,
         reviewId: +reviewId,
         userId: +userId
       },
-      data: { content, rating }
+      data: { content, raiting }
     })
 
     return data;
   }
 
-  deleteReiview = async (sitterId, reviewId, userId) => {
+  deleteReview = async (sitterId, reviewId, userId) => {
     const data = await this.prisma.Reviews.delete({
       where: {
         sitterId: +sitterId,

@@ -8,12 +8,17 @@ Content-Type: application/json
 
 {
     "content":"리뷰입니다",
-    "rating":7
+    "raiting":7
 }
 
 ### reviews 수정
 DELETE  http://localhost:3000/api/reviewss/6
 Content-Type: application/json
+
+{
+    "content":"리뷰입니다",
+    "raiting":7
+}
 
 ### reviews 삭제
 DELETE  http://localhost:3000/api/reviewss/6
