@@ -6,6 +6,17 @@ export class UsersService {
   usersRepository = new UsersRepository();
 
   signUp = async (email, password, phone, address) => {
+    let emailValidationRegex = new RegExp('[a-z0-9._]+@[a-z]+.[a-z]{2,3}');
+
+    const isValidEmail = emailValidationRegex.test(email);
+    if (!isValidEmail) {
+      throw new CustomError('이메일 형식이 올바르지 않습니다.', 400);
+    }
+
+    if (password.length < 6) {
+      throw new CustomError('비밀번호는 6자리 이상이어야 합니다', 400);
+    }
+
     const exsistUser = await this.usersRepository.findUserByEmail(email);
 
     if (exsistUser) {
