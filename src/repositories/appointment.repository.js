@@ -19,26 +19,33 @@ export class AppointmentsRepository {
     });
     return appointments;
   };
+
+  getSitterByName = async (sitterName) => {
+    const getSitter = await this.prisma.PetSitters.findFirst({
+      where: { name: sitterName },
+    });
+    return getSitter;
+  };
+
+  checkAppointment = async (sitterId, date) => {
+    const findAppointment = await this.prisma.Appointments.findFirst({
+      where: { date: date, sitterId: sitterId },
+    });
+    return findAppointment;
+  };
+
   createAppointment = async (
     userId,
-    email,
-    sitterName,
+    sitterId,
     pets,
     date,
     phone,
     address,
     significant,
   ) => {
-    const getSitterId = await this.prisma.PetSitters.findFirst({
-      where: { name: sitterName },
-    });
-
-    if (!getSitterId) {
-      throw new CustomError('존재하지 않는 시터입니다', 404);
-    }
     const createdAppointment = await this.prisma.Appointments.create({
       data: {
-        sitterId: getSitterId.sitterId,
+        sitterId: sitterId,
         userId: userId,
         pets: pets,
         date: date,
@@ -57,15 +64,16 @@ export class AppointmentsRepository {
     return createdAppointment;
   };
 
-  deleteAppointment = async (userId, appointmentId) => {
+  getAppointmentById = async (appointmentId) => {
     const appointment = await this.prisma.Appointments.findUnique({
       where: {
         appointmentId: +appointmentId,
       },
     });
-    if (!appointment) {
-      throw new CustomError('예약정보가 없습니다', 404);
-    }
+    return appointment;
+  };
+
+  deleteAppointment = async (userId, appointmentId) => {
     const deletedAppointment = await this.prisma.Appointments.delete({
       where: {
         userId: userId,
