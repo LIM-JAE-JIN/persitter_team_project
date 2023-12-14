@@ -1,1 +1,25 @@
-1
+### reviews 조회
+GET  http://localhost:3000/api/reviews/1
+Content-Type: application/json
+
+### reviews 생성
+POST http://localhost:3000/api/reviews/1
+Content-Type: application/json
+
+{
+    "content":"리뷰입니다",
+    "raiting":7
+}
+
+### reviews 수정
+DELETE  http://localhost:3000/api/reviewss/6
+Content-Type: application/json
+
+{
+    "content":"리뷰입니다",
+    "raiting":7
+}
+
+### reviews 삭제
+DELETE  http://localhost:3000/api/reviewss/6
+Content-Type: application/json

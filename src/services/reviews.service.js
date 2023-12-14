@@ -4,8 +4,8 @@ export class ReviewsService {
     this.reviewsRepository = reviewsRepository;
   }
 
-  createReview = async (sitterId, userId, email, content, rating) => {
-    const data = await this.reviewsRepository.createReview(sitterId, userId, content, rating);
+  createReview = async (sitterId, userId, email, content, raiting) => {
+    const data = await this.reviewsRepository.createReview(sitterId, userId, content, raiting);
 
     const userChk = await this.reviewsRepository.appointmentChk(userId, sitterId);
 
@@ -15,7 +15,7 @@ export class ReviewsService {
       reviewId: data.reviewId,
       email: email,
       content: data.content,
-      rating: data.rating,
+      raiting: data.raiting,
       createdAt: data.createdAt,
       updatedAt: data.updatedAt
     };
@@ -29,20 +29,20 @@ export class ReviewsService {
 
     return data.map((review) => {
       return {
-        reviewId: data.reviewId,
-        email: data.Users.email,
-        content: data.content,
-        rating: data.rating,
-        createdAt: data.createdAt,
-        updatedAt: data.updatedAt
+        reviewId: review.reviewId,
+        email: review.Users.email,
+        content: review.content,
+        raiting: review.raiting,
+        createdAt: review.createdAt,
+        updatedAt: review.updatedAt
       }
     })
   }
 
-  updateReview = async (sitterId, reviewId, userId, content, rating) => {
+  updateReview = async (sitterId, reviewId, userId, content, raiting) => {
 
     // 리뷰가 존재하지 않는 경우
-    const review = await this.reviewsRepository.getReview(sitterId, reviewId, userId);
+    const review = await this.reviewsRepository.getReview(sitterId, reviewId);
 
     if (!review) throw new CustomError('리뷰가 없습니다', 404);
 
@@ -50,12 +50,12 @@ export class ReviewsService {
     const isMatchedId = review.userId === userId;
     if (!isMatchedId) throw new CustomError('리뷰 수정 권한이 없습니다.', 403);
 
-    const data = await this.reviewsRepository.updateReview(sitterId, reviewId, userId, content, rating);
+    const data = await this.reviewsRepository.updateReview(sitterId, reviewId, userId, content, raiting);
 
     return {
       reviewId: data.reviewId,
       content: data.content,
-      rating: data.rating,
+      raiting: data.raiting,
       createdAt: data.createdAt,
       updatedAt: data.updatedAt
     }
@@ -77,7 +77,7 @@ export class ReviewsService {
     return {
       reviewId: data.reviewId,
       content: data.content,
-      rating: data.rating,
+      raiting: data.raiting,
       createdAt: data.createdAt,
       updatedAt: data.updatedAt
     }
