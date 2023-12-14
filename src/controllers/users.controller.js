@@ -86,8 +86,38 @@ export class UsersController {
   getMyInfo = async (req, res, next) => {
     try {
       const user = req.user;
-      console.log(user);
       return res.status(200).json(user);
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  };
+
+  putMyInfo = async (req, res, next) => {
+    try {
+      const { userId } = req.user;
+      const { password, phone, imgUrl, address } = req.body;
+      await this.usersService.putMyInfo(
+        userId,
+        password,
+        phone,
+        imgUrl,
+        address,
+      );
+
+      return res.status(200).json({ message: '성공적으로 수정 되었습니다.' });
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  };
+
+  deleteMyInfo = async (req, res, next) => {
+    try {
+      const { userId } = req.user;
+
+      await this.usersService.deleteMyInfo(userId);
+      return res.status(200).json({ message: '회원 탈퇴 완료' });
     } catch (error) {
       console.log(error);
       next(error);

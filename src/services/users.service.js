@@ -53,4 +53,25 @@ export class UsersService {
       next(error);
     }
   };
+
+  putMyInfo = async (userId, password, phone, imgUrl, address) => {
+    try {
+      const user = await this.usersRepository.findUserById(userId);
+
+      await this.usersRepository.updateMyInfo(
+        user,
+        password,
+        phone,
+        imgUrl,
+        address,
+      );
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  };
+
+  deleteMyInfo = async (userId) => {
+    await this.usersRepository.deleteMyInfo(userId);
+  };
 }
