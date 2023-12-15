@@ -9,7 +9,7 @@ export class ReviewsService {
 
     const userChk = await this.reviewsRepository.appointmentChk(userId, sitterId);
 
-    if (userChk) throw new Error('리뷰 작성 권한이 없습니다.', 403);
+    if (!userChk) throw new Error('리뷰 작성 권한이 없습니다.', 403);
 
     return {
       reviewId: data.reviewId,
