@@ -1,6 +1,6 @@
 window.signup = signup;
 
-function signup() {
+async function signup() {
     const email = document.getElementById('email').value;
     const userName = document.getElementById('username').value;
     const password = document.getElementById('password').value;
@@ -15,7 +15,7 @@ function signup() {
         confirmPassword: confirmPassword,
         phone: phone,
         address: address,
-    }
+    };
 
 
     fetch('http://localhost:3000/api/users/signup', {
@@ -25,24 +25,19 @@ function signup() {
         },
         body: JSON.stringify(userInfo),
     })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then((data) => {
-            if (data.success) {
+        .then((response) => response.json()) 
+        .then((result) => {
+            console.log(result.message);  
+        if (result.success) {
+            alert(`${result.message}`);
+            window.location.href = '/page/signin.html';
+        } else {
+            alert(`${result.message}`);
+            window.location.href = '/page/signup.html';
 
-                alert(`${data.message}`);
-                window.location.href = '/page/signin.html';
-            } else {
-                alert(`${result.errorMessage}`);
-                window.location.href = '/page/signup.html';
-
-            }
-        })
-        .catch(error => {
-            console.log(error.message);
+        }
+    })
+        .catch((error) => {
+            console.log(error);
         });
 }

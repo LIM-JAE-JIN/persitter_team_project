@@ -3,11 +3,11 @@ import { prisma } from '../utils/prisma/index.js';
 export class PetsRepository {
 
     // 펫 생성
-    createOne = async (UserId, petName, petAge, imgUrl, petCategory) => {
+    createOne = async (userId, petName, petAge, imgUrl, petCategory) => {
         try {
             const createdPet = await prisma.Pets.create({
                 data: {
-                    UserId,
+                    userId,
                     petName,
                     petAge,
                     imgUrl,
