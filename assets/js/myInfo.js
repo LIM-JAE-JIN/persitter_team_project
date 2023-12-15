@@ -181,13 +181,14 @@ async function quitAppointment() {
   const flag = confirm(msg);
 
   if (flag) {
-    await deleteAppointment();
+    const myAppointment = await getMyAppointment();
+    await deleteAppointment(myAppointment[0].appointmentId);
     alert('예약이 취소되었습니다.');
     location.reload(true);
   }
 }
 
-async function deleteAppointment() {
+async function deleteAppointment(appointmentId) {
   const options = {
     method: 'DELETE',
     headers: {
@@ -196,7 +197,9 @@ async function deleteAppointment() {
     },
   };
 
+  console.log(appointmentId);
   const response = await fetch(
     `http://localhost:3000/api/appointments/${appointmentId}`,
+    options,
   );
 }
