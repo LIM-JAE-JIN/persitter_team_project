@@ -10,25 +10,24 @@ async function signin() {
         password: password,
     };
 
-    // 서버로 데이터 전송
-    fetch('http://localhost:3000/api/users/signin', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userInput),
-    })
-        .then((response) => response.json())
-        .then((result) => {
-            if (result.success) {
-                alert(`${result.message}`);
-                window.location.href = '/page/main.html';
-            } else {
-                alert(`${result.errorMessage}`);
-                window.location.href = '/page/signin.html';
-            }
+
+    const response = await fetch('http://localhost:3000/api/users/signin', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(userInput),
         })
-        .catch((error) => {
-            console.error('회원가입 실패:', error);
-        });
+
+        const userInfo = await response.json();
+        
+        console.log(userInfo)
+
+        if(userInfo.success){
+            alert(userInfo.message);
+            window.location.href = '/page/main.html';
+        } else {
+            alert(userInfo.message);
+            window.location.href = '/page/signin.html';
+        }
 }
