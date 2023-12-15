@@ -25,7 +25,9 @@ async function signin() {
 
         if(userInfo.success){
             alert(userInfo.message);
+            window.location.href = '/page/main.html';
         } else {
             alert(userInfo.message);
+            window.location.href = '/page/signin.html';
         }
 }
