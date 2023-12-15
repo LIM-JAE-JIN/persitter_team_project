@@ -7,16 +7,68 @@ const { token, requireLogin } = auth();
 
 document.addEventListener('DOMContentLoaded', async () => {
   const user = await requireLogin();
-  document.getElementById('span-user-email').innerHTML = `EMAIL : ${user.email}`;
-  document.getElementById('span-user-phone').innerHTML = `PHONE : ${user.phone}`;
-  document.getElementById('span-user-address').innerHTML = `ADDRESS : ${user.address}`;
+  const appointmentInfo = await getMyAppointment();
+  const myPet = await getMyPets();
 
-  document.getElementById('span-appointment-date').innerHTML =
-    '예약 날짜';
-  document.getElementById('span-appointment-phone').innerHTML =
-    '예약 폰번호';
-  document.getElementById('span-appointment-address').innerHTML =
-    '예약 주소';
+  console.log(appointmentInfo);
+
+  document.getElementById(
+    'span-user-email',
+  ).innerHTML = `EMAIL : ${user.email}`;
+  document.getElementById(
+    'span-user-phone',
+  ).innerHTML = `PHONE : ${user.phone}`;
+  document.getElementById(
+    'span-user-address',
+  ).innerHTML = `ADDRESS : ${user.address}`;
+
+  const appointmentlist = document.getElementById('appointment_list');
+
+  appointmentInfo.forEach((element) => {
+    let appointmentHtml = ` 
+        <a href="#" class="btn btn-primary" 
+        onclick="quitAppointment()" style="float: right">예약 취소</a>
+
+        <p class="card-text" id="span-appointment-date"
+          style="font-size: 15px; margin-bottom: 10px;">
+          Appointment Date : ${element.date}
+         </p>
+
+        <p class="card-text" id="span-appointment-phone"
+          style="font-size: 15px; margin-bottom: 10px;">
+          Appointment Phone : ${element.sitterPhone}
+        </p>
+
+        <p class="card-text" id="span-appointment-address" 
+          style="font-size: 15px; margin-bottom: 20px; 
+          border-bottom: 1px solid #000;">
+          Appointment address: ${element.address}
+        </p>    
+      `;
+
+    appointmentlist.innerHTML += appointmentHtml;
+  });
+
+  const petList = document.getElementById('petWrap');
+
+  myPet.forEach((pet) => {
+    let petHtml = `
+    <li>
+    <div class="card">
+      <img src="${pet.imgUrl}" class="card-img-top" alt="..." />
+      <div class="card-body">
+        <h5 class="card-title">${pet.petName}</h5>
+        <p class="card-text">${pet.petAge}</p>
+        <a href="#" class="btn btn-primary" style="margin-top: 10px"
+          >삭제</a
+        >
+      </div>
+    </div>
+  </li>      
+        `;
+
+    petList.innerHTML += petHtml;
+  });
 });
 
 function getCookieValue(name) {
@@ -32,7 +84,7 @@ async function getUserInfo() {
     headers,
   });
 
-  const user = await response.json();
+  const userInfo = await response.json();
   return userInfo;
 }
 
@@ -67,49 +119,145 @@ function auth() {
         return user;
       } catch {
         alert('인증된 사용자가 아닙니다.');
+        window.location.href = '/page/main.html';
       }
     },
   };
 }
 
 //내정보 수정하기
-$('#editBtn').on('click', async function () {
-  const password = document.getElementById('userPassword').value;
-  const phone = document.getElementById('userPhone').value;
-  const imgUrl = document.getElementById('userImgUrl').value;
-  const address = document.getElementById('userAddress').value;
-
-  const editInput = {
-    password,
-    phone,
-    imgUrl,
-    address,
-  };
-
-  const profileEditData = await updateMyInfo(editInput);
-});
 
 async function updateMyInfo(profileDate) {
   try {
     const options = {
       method: 'PUT',
       headers: {
+        authorization: `${getCookieValue('connect.sid')}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(profileDate),
     };
-    const response = await fetch('http://localhost:3000/api/users/me');
+    const response = await fetch('http://localhost:3000/api/users/me', options);
     const data = await response.json();
-
-    if (data.success) {
-      console.log('프로필이 성공적으로 수정되었습니다.', data.data);
-      alert('프로필이 수정되었습니다.');
-      return data;
-    } else {
-      console.error('프로필 수정 실패: ', data, message);
-      alert(data.message);
-    }
   } catch (error) {
     console.log(error);
   }
+}
+
+$('#editBtn').on('click', async function () {
+  const address = document.getElementById('userAddress').value;
+  const phone = document.getElementById('userPhone').value;
+  // const imgUrl = document.getElementById('userImgUrl').value ?? null;
+  const password = document.getElementById('userPassword').value;
+
+  const editInput = {
+    password,
+    phone,
+    // imgUrl,
+    address,
+  };
+
+  const profileEditData = await updateMyInfo(editInput);
+
+  if (profileEditData) {
+    alert('수정이 완료되었습니다');
+  } else {
+    alert('수정에 실패했습니다.');
+    return;
+  }
+});
+
+//예약 목록 가져오기
+async function getMyAppointment() {
+  try {
+    const response = await fetch('http://localhost:3000/api/appointments', {
+      headers,
+    });
+
+    const appointmentInfo = await response.json();
+
+    const user = await getUserInfo();
+    const appointment = appointmentInfo.data.filter(
+      (data) => data.userId === user.userId,
+    );
+
+    return appointment;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+//회원 탈퇴
+
+window.signOut = signOut;
+window.quitAppointment = quitAppointment;
+
+async function signOut() {
+  const msg = '탈퇴하시겠습니까?';
+  const flag = confirm(msg);
+
+  if (flag) {
+    await deleteUser();
+    alert('변경되었습니다.');
+    res.clearCookie('connect.sid');
+    window.location.href = '/page/main.html';
+  } else alert('취소하였습니다.');
+}
+
+async function deleteUser() {
+  const options = {
+    method: 'DELETE',
+    headers: {
+      authorization: `${getCookieValue('connect.sid')}`,
+      'Content-Type': 'application/json',
+    },
+  };
+
+  const response = await fetch('http://localhost:3000/api/users/me', options);
+}
+
+async function quitAppointment() {
+  const msg = '예약을 취소 하시겠습니까?';
+  const flag = confirm(msg);
+
+  if (flag) {
+    const myAppointment = await getMyAppointment();
+    await deleteAppointment(myAppointment[0].appointmentId);
+    alert('예약이 취소되었습니다.');
+    location.reload(true);
+  }
+}
+
+async function deleteAppointment(appointmentId) {
+  const options = {
+    method: 'DELETE',
+    headers: {
+      authorization: `${getCookieValue('connect.sid')}`,
+      'Content-Type': 'application/json',
+    },
+  };
+
+  console.log(appointmentId);
+  const response = await fetch(
+    `http://localhost:3000/api/appointments/${appointmentId}`,
+    options,
+  );
+}
+
+// 내 펫 그려주기
+
+async function getMyPets() {
+  const response = await fetch('http://localhost:3000/api/pets/user');
+  const responseData = await response.json();
+
+  if (!responseData.success) {
+    return alert(`${responseData.message}`);
+  }
+  const pets = responseData.data;
+
+  if (pets.length === 0) {
+    return alert('펫 등록 후 사용해주세요');
+  }
+
+  return pets;
 }

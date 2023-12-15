@@ -10,7 +10,6 @@
     <script type="module" src="/js/common.js"></script>
     <script type="module" src="/js/myInfo.js"></script>
     <title>F4Sitter</title>
-    <script></script>
   </head>
 
   <body>
@@ -25,9 +24,9 @@
           <input
             type="text"
             class="dr-input"
-            id="userPassword"
-            name="userPassword"
-            placeholder="변경할 비밀번호를 입력해주세요"
+            id="userAddress"
+            name="userAddress"
+            placeholder="변경할 주소를 입력해주세요"
           />
         </div>
         <div class="mb-5 dr-input-wrap">
@@ -43,9 +42,9 @@
           <input
             type="password"
             class="dr-input"
-            id="userAddress"
-            name="userAddress"
-            placeholder="변경할 주소를 입력해주세요."
+            id="userPassword"
+            name="userPassword"
+            placeholder="변경할 비밀번호를 입력해주세요."
           />
         </div>
       </div>
@@ -190,6 +189,7 @@
           <a
             href="javascript:void(0);"
             class="btn btn-primary"
+            onclick="signOut()"
             style="float: right; margin-left: 5px"
             >탈퇴하기</a
           >
@@ -204,20 +204,38 @@
       </div>
 
       <div style="margin-top: 50px">
-        <h1 style="font-weight: bold; margin-bottom: 20px">내 예약 목록</h1>
         <ul>
           <li>
             <div class="card">
-              <h5 class="card-header">Featured</h5>
-              <div class="card-body">
-                <h5 class="card-title">Special title treatment</h5>
-                <p class="card-text">
-                  With supporting text below as a natural lead-in to additional
-                  content.
-                </p>
-                <a href="#" class="btn btn-primary" style="float: right"
+              <h3
+                class="card-header"
+                style="font-weight: bold; margin-bottom: 20px"
+              >
+                내 예약 목록
+              </h3>
+              <div class="card-body" id="appointment_list">
+                <!-- <p
+                  class="card-text"
+                  id="span-appointment-date"
+                  style="font-size: 15px"
+                ></p>
+                <p
+                  class="card-text"
+                  id="span-appointment-phone"
+                  style="font-size: 15px"
+                ></p>
+                <p
+                  class="card-text"
+                  id="span-appointment-address"
+                  style="font-size: 15px"
+                ></p>
+                <a
+                  href="#"
+                  class="btn btn-primary"
+                  onclick="quitAppointment()"
+                  style="float: right"
                   >예약 취소</a
-                >
+                > -->
               </div>
             </div>
           </li>
@@ -237,7 +255,7 @@
         <button type="button" class="btn btn-primary">펫 등록</button>
       </div>
       <ul class="petWrap" id="petWrap">
-        <li>
+        <!-- <li>
           <div class="card">
             <img src="/images/huchu.jpg" class="card-img-top" alt="..." />
             <div class="card-body">
@@ -260,7 +278,7 @@
               >
             </div>
           </div>
-        </li>
+        </li> -->
       </ul>
     </section>
 
