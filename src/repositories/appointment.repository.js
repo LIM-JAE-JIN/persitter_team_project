@@ -4,7 +4,7 @@ export class AppointmentsRepository {
   constructor(prisma) {
     this.prisma = prisma;
   }
-  getAppointments = async (userId) => {
+  getAppointmentsById = async (userId) => {
     const appointments = await this.prisma.Appointments.findMany({
       where: { userId: userId },
       include: {

@@ -1,42 +1,257 @@
-function sample6_execDaumPostcode() {
-  new daum.Postcode({
-    oncomplete: function (data) {
-      // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+import { drPopupOpen } from './common.js';
 
-      // 각 주소의 노출 규칙에 따라 주소를 조합한다.
-      // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
-      var addr = ''; // 주소 변수
-      var extraAddr = ''; // 참고항목 변수
+window.createReview = createReview;
+window.appointPopupOpen = appointPopupOpen;
+window.createAppointment = createAppointment;
+window.deleteReview = deleteReview;
+window.editReview = editReview;
 
-      //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
-      if (data.userSelectedType === 'R') {
-        // 사용자가 도로명 주소를 선택했을 경우
-        addr = data.roadAddress;
-      } else {
-        // 사용자가 지번 주소를 선택했을 경우(J)
-        addr = data.jibunAddress;
-      }
+//팝업 열기
+async function appointPopupOpen() {
+  try {
+    const response = await fetch(`http://localhost:3000/api/pets/user`);
+    const responseData = await response.json();
 
-      // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
-      if (data.userSelectedType === 'R') {
-        // 법정동명이 있을 경우 추가한다. (법정리는 제외)
-        // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
-        if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
-          extraAddr += data.bname;
-        }
-        // 건물명이 있고, 공동주택일 경우 추가한다.
-        if (data.buildingName !== '' && data.apartment === 'Y') {
-          extraAddr +=
-            extraAddr !== '' ? ', ' + data.buildingName : data.buildingName;
-        }
-        // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
-        if (extraAddr !== '') {
-          extraAddr = ' (' + extraAddr + ')';
-        }
-      }
-      document.getElementById('sample6_address').value = addr;
-      // 커서를 상세주소 필드로 이동한다.
-      document.getElementById('sample6_detailAddress').focus();
-    },
-  }).open();
+    if (!responseData.success) {
+      return alert(`${responseData.message}`);
+    }
+    const pets = responseData.data;
+
+    if (pets.length === 0) {
+      return alert('펫 등록 후 사용해주세요');
+    }
+    const myPetList = document.getElementById('myPetList');
+    pets.forEach((pet) => {
+      let petHtml = `<input type="checkbox"  value=${pet.petName} />
+      <label >${pet.petName}</label>`;
+      myPetList.innerHTML += petHtml;
+    });
+    drPopupOpen('#appointment_modal');
+  } catch (error) {
+    alert(`${error.message}`);
+    // 에러 처리를 원하는 대로 수행
+  }
 }
+// // 팝업닫기
+
+// 예약하기 버튼 누를시
+async function createAppointment(popName) {
+  try {
+    let myPetList = document.getElementById('myPetList');
+    let checkboxes = myPetList.querySelectorAll(
+      'input[type="checkbox"]:checked',
+    );
+    let sample6_address = document.getElementById('sample6_address').value;
+    let sample6_detailAddress = document.getElementById(
+      'sample6_detailAddress',
+    ).value;
+    let appointPets = [...checkboxes]
+
+      .map((checkbox) => checkbox.value)
+      .join(',');
+    let selectSitter = document.getElementById('selectSitter').value;
+    let appointmentDate = document.getElementById('appointmentDate').value;
+    let appointmentPhone = document.getElementById('appointmentPhone').value;
+    let appointAddress = sample6_address + '/' + sample6_detailAddress;
+    let appointmentSignificant = document.getElementById(
+      'appointmentSignificant',
+    ).value;
+    const data = {
+      sitterName: selectSitter,
+      pets: appointPets,
+      date: appointmentDate,
+      phone: appointmentPhone,
+      address: appointAddress,
+      significant: appointmentSignificant,
+    };
+
+    const response = await fetch(`http://localhost:3000/api/appointments`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    const responseData = await response.json();
+
+    if (!responseData.success) {
+      return alert(`${responseData.message}`);
+    }
+    alert('예약이 성공적으로 등록됬습니다');
+    $('body').css('overflow', 'auto');
+    $(popName).closest('.dr-popup-wrap').css('display', 'none');
+    $('.dr-dim').css('display', 'none');
+  } catch (error) {
+    alert(`${error.message}`);
+  }
+}
+// 예약하기 버튼 누를시
+
+// Appointment Create
+const getSitters = async () => {
+  // 백엔드 조회 api 가져오기
+  const response = await fetch(`http://localhost:3000/api/petsitter`);
+  const responseData = await response.json();
+  if (!responseData.success) {
+    return alert(`${responseData.message}`);
+  }
+  const sitters = responseData.data;
+
+  makeSitterList(sitters);
+};
+const makeSitterList = async (sitters) => {
+  const sitterList = document.getElementById('selectSitter');
+  sitterList.innerHTML = sitters
+    .map((sitter) => `<option value="${sitter.name}">${sitter.name}</option>`)
+    .join('');
+};
+// Appointment Create
+
+// Review Create
+async function createReview() {
+  let reviewContent = document.getElementById('reviewContent').value;
+  let reviewRaiting = document.getElementById('reviewRaiting').value;
+  let queryString = window.location.search;
+  let urlParams = new URLSearchParams(queryString);
+  let sitterId = urlParams.get('sitter');
+  const data = {
+    content: reviewContent,
+    raiting: +reviewRaiting,
+  };
+  try {
+    const response = await fetch(
+      `http://localhost:3000/api/reviews/${sitterId}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      },
+    );
+    const responseData = await response.json();
+
+    if (!responseData.success) {
+      return alert(`${responseData.message}`);
+    }
+    let jsonSitterId = { sitterId: sitterId };
+    await getSitterReviews(jsonSitterId);
+    alert('댓글이 성공적으로 등록됬습니다');
+    document.getElementById('reviewContent').value = '';
+    document.getElementById('reviewContent').focus();
+  } catch (error) {
+    const errorResponse = JSON.parse(error.message);
+    alert(`에러 발생: ${errorResponse.message}`);
+  }
+}
+// Review Create
+
+// SitterDetail get Data
+let queryString = window.location.search;
+let urlParams = new URLSearchParams(queryString);
+let sitterId = urlParams.get('sitter');
+const getSitter = async () => {
+  try {
+    const response = await fetch(
+      `http://localhost:3000/api/petsitter/${sitterId}`,
+    );
+    const responseData = await response.json();
+    const sitter = responseData.data;
+    await getSitterReviews(sitter);
+    getSitterInfo(sitter);
+  } catch (error) {
+    alert(`${error.message}`);
+  }
+};
+const getSitterReviews = async (sitter) => {
+  try {
+    const sitterId = sitter.sitterId;
+    const response = await fetch(
+      `http://localhost:3000/api/reviews/${sitterId}`,
+    );
+    const responseData = await response.json();
+    const reviews = await responseData.data;
+    makeSitterReviews(reviews);
+  } catch (error) {
+    alert(`${error.message}`);
+  }
+};
+const getSitterInfo = (sitter) => {
+  const sitterImgUrl = document.getElementById('sitterImgUrl');
+  const sitterInfo = document.getElementById('sitterInfoList');
+
+  sitterImgUrl.src = sitter.imgUrl;
+  sitterInfo.innerHTML = `   
+    <li id="sitterCareer">경력:${sitter.career}</li>
+    <li id="sitterPhone">전화번호:${sitter.phone}</li>
+    <li id="sitterAddress">주소:${sitter.address}</li>
+    <li id="sitterIntroduce">자기소개:${sitter.introduce}</li>`;
+};
+
+const makeSitterReviews = async (reviews) => {
+  const reviewsList = document.getElementById('sitterReviewList');
+  const response = await fetch('http://localhost:3000/api/users/me');
+  const responseData = await response.json();
+
+  reviewsList.innerHTML = '';
+  console.log(reviews);
+  reviews.forEach((review) => {
+    if (responseData.userId == review.userId) {
+      let reviewHtml = `<li class="reviews">
+      <p>${review.raiting}</p>
+      <p>
+        <span style="font-weight: bold">${review.email}</span>
+      </p>
+      <p class="review-content">${review.content}</p>
+      <div class="review-btnFD">
+      <button class="btn btn-primary" onclick="editReview(${review.reviewId})">수정</button>
+      <button class="btn btn-primary" onclick="deleteReview(${review.reviewId})">삭제</button>
+        <p class="review-createdAt">${review.updatedAt}</p>
+      </div>
+    </li>`;
+      reviewsList.innerHTML += reviewHtml;
+    } else {
+      let reviewHtml = `<li class="reviews">
+      <p>${review.raiting}</p>
+      <p>
+        <span style="font-weight: bold">${review.email}</span>
+      </p>
+      <p class="review-content">${review.content}</p>
+      <div class="review-btnFD">
+        <p class="review-createdAt">${review.updatedAt}</p>
+      </div>
+    </li>`;
+      reviewsList.innerHTML += reviewHtml;
+    }
+  });
+};
+async function deleteReview(reviewId) {
+  try {
+    let queryString = window.location.search;
+    let urlParams = new URLSearchParams(queryString);
+    let sitterId = urlParams.get('sitter');
+
+    const msg = '삭제하시겠습니까?';
+    const flag = confirm(msg);
+
+    if (flag) {
+      await fetch(`http://localhost:3000/api/reviews/${sitterId}/${reviewId}`, {
+        method: 'DELETE',
+      });
+      alert('삭제되었습니다.');
+    } else alert('취소하였습니다.');
+
+    let jsonSitterId = { sitterId: sitterId };
+    await getSitterReviews(jsonSitterId);
+  } catch (error) {
+    alert(`${error.message}`);
+  }
+}
+
+async function editReview(reviewId) {
+  drPopupOpen('#reviewEditPopup');
+}
+
+getSitter();
+getSitters();
+// SitterDetail get Data
