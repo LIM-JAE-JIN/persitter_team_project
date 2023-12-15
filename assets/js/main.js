@@ -1,3 +1,5 @@
+window.play = play;
+
 $(document).ready(function () {
   var $images = $('.image');
   var currentIndex = 0;
@@ -60,3 +62,8 @@ const makeCard = (sitters) => {
     )
     .join('');
 };
+
+function play() {
+  var audio = document.getElementById("audioPlayer");
+  audio.play();
+}

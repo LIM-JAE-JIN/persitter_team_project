@@ -650,8 +650,8 @@ input::placeholder {
   margin: 0 auto;
 }
 .header .header_wrap h2 {
-  min-width: 113px;
-  width: 113px;
+  min-width: 150px;
+  width: 150px;
 }
 .header .header_wrap h2 img {
   width: 100%;
