@@ -79,9 +79,15 @@ export class UsersService {
         throw new CustomError('이미 사용중인 핸드폰 번호 입니다.', 400);
       }
 
+      if (password.length < 6) {
+        throw new CustomError('비밀번호는 6자리 이상이어야 합니다', 400);
+      }
+      const salt = process.env.HASH_SALT_ROUNDS;
+      const bcryptPassword = bcrypt.hashSync(password, +salt);
+
       await this.usersRepository.updateMyInfo(
         user,
-        password,
+        bcryptPassword,
         phone,
         imgUrl,
         address,

@@ -7,16 +7,28 @@ const { token, requireLogin } = auth();
 
 document.addEventListener('DOMContentLoaded', async () => {
   const user = await requireLogin();
-  document.getElementById('span-user-email').innerHTML = `EMAIL : ${user.email}`;
-  document.getElementById('span-user-phone').innerHTML = `PHONE : ${user.phone}`;
-  document.getElementById('span-user-address').innerHTML = `ADDRESS : ${user.address}`;
+  const appointmentInfo = await getMyAppointment();
+  console.log(appointmentInfo);
 
-  document.getElementById('span-appointment-date').innerHTML =
-    '예약 날짜';
-  document.getElementById('span-appointment-phone').innerHTML =
-    '예약 폰번호';
-  document.getElementById('span-appointment-address').innerHTML =
-    '예약 주소';
+  document.getElementById(
+    'span-user-email',
+  ).innerHTML = `EMAIL : ${user.email}`;
+  document.getElementById(
+    'span-user-phone',
+  ).innerHTML = `PHONE : ${user.phone}`;
+  document.getElementById(
+    'span-user-address',
+  ).innerHTML = `ADDRESS : ${user.address}`;
+
+  document.getElementById(
+    'span-appointment-date',
+  ).innerHTML = `Appointment Date : ${appointmentInfo[0].date}`;
+  document.getElementById(
+    'span-appointment-phone',
+  ).innerHTML = `Appointment Phone : ${appointmentInfo[0].sitterPhone}`;
+  document.getElementById(
+    'span-appointment-address',
+  ).innerHTML = `appointment address: ${appointmentInfo[0].address}`;
 });
 
 function getCookieValue(name) {
@@ -32,7 +44,7 @@ async function getUserInfo() {
     headers,
   });
 
-  const user = await response.json();
+  const userInfo = await response.json();
   return userInfo;
 }
 
@@ -67,49 +79,98 @@ function auth() {
         return user;
       } catch {
         alert('인증된 사용자가 아닙니다.');
+        window.location.href = '/page/main.html';
       }
     },
   };
 }
 
 //내정보 수정하기
-$('#editBtn').on('click', async function () {
-  const password = document.getElementById('userPassword').value;
-  const phone = document.getElementById('userPhone').value;
-  const imgUrl = document.getElementById('userImgUrl').value;
-  const address = document.getElementById('userAddress').value;
-
-  const editInput = {
-    password,
-    phone,
-    imgUrl,
-    address,
-  };
-
-  const profileEditData = await updateMyInfo(editInput);
-});
 
 async function updateMyInfo(profileDate) {
   try {
     const options = {
       method: 'PUT',
       headers: {
+        authorization: `${getCookieValue('connect.sid')}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(profileDate),
     };
-    const response = await fetch('http://localhost:3000/api/users/me');
+    const response = await fetch('http://localhost:3000/api/users/me', options);
     const data = await response.json();
-
-    if (data.success) {
-      console.log('프로필이 성공적으로 수정되었습니다.', data.data);
-      alert('프로필이 수정되었습니다.');
-      return data;
-    } else {
-      console.error('프로필 수정 실패: ', data, message);
-      alert(data.message);
-    }
   } catch (error) {
     console.log(error);
   }
+}
+
+$('#editBtn').on('click', async function () {
+  const address = document.getElementById('userAddress').value;
+  const phone = document.getElementById('userPhone').value;
+  // const imgUrl = document.getElementById('userImgUrl').value ?? null;
+  const password = document.getElementById('userPassword').value;
+
+  const editInput = {
+    password,
+    phone,
+    // imgUrl,
+    address,
+  };
+
+  const profileEditData = await updateMyInfo(editInput);
+
+  if (profileEditData) {
+    alert('수정이 완료되었습니다');
+  } else {
+    alert('수정에 실패했습니다.');
+    return;
+  }
+});
+
+//예약 목록 가져오기
+async function getMyAppointment() {
+  try {
+    const response = await fetch('http://localhost:3000/api/appointments', {
+      headers,
+    });
+
+    const appointmentInfo = await response.json();
+
+    const user = await getUserInfo();
+    const appointment = appointmentInfo.data.filter(
+      (data) => data.userId === user.userId,
+    );
+
+    return appointment;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+//회원 탈퇴
+
+window.signOut = signOut;
+
+async function signOut() {
+  const msg = '탈퇴하시겠습니까?';
+  const flag = confirm(msg);
+
+  if (flag) {
+    await deleteUser();
+    alert('변경되었습니다.');
+    res.clearCookie('connect.sid');
+    window.location.href = '/page/main.html';
+  } else alert('취소하였습니다.');
+}
+
+async function deleteUser() {
+  const options = {
+    method: 'DELETE',
+    headers: {
+      authorization: `${getCookieValue('connect.sid')}`,
+      'Content-Type': 'application/json',
+    },
+  };
+
+  const response = await fetch('http://localhost:3000/api/users/me', options);
 }
