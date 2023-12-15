@@ -51,6 +51,10 @@ export class PetsService {
         });
     }
 
+    // 유저의 펫 조회
+    getUserPets = async (userId) => {
+        return await this.petsRepository.getUserPets(userId);
+    }
 
     // 펫 수정
     updatePet = async (petId, petName, petAge, imgUrl, petCategory) => {
@@ -76,7 +80,7 @@ export class PetsService {
     deletePet = async (petId) => {
         const pet = await this.petsRepository.findPetById(petId);
 
-        if(!pet) throw new CustomError ('펫이 존재하지 않습니다.', 404);
+        if (!pet) throw new CustomError('펫이 존재하지 않습니다.', 404);
 
         await this.petsRepository.deletePet(petId);
 
