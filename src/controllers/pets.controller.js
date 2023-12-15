@@ -39,13 +39,33 @@ export class PetsController {
         try {
             const getPets = await this.petsService.getMyPets();
 
-            if(!getPets) throw new CustomError('펫이 없습니다.', 400);
+            if (!getPets) throw new CustomError('펫이 없습니다.', 400);
 
             return res.status(200).json({
                 message: "성공적으로 조회 되었습니다.",
                 data: getPets
             });
 
+        } catch (error) {
+            console.log("에러 : ", error);
+            next(error);
+        }
+    }
+
+
+    // 유저의 펫 조회
+    getUserPets = async (req, res, next) => {
+        try {
+            const { userId } = req.user;
+
+            if (!userId) throw new CustomError('존재하지 않는 사용자 입니다.', 404);
+
+            const userPets = await this.petsService.getUserPets(userId);
+            return res.status(200).json({
+                success: true,
+                message: "성공적으로 조회 되었습니다.",
+                data: userPets,
+            });
         } catch (error) {
             console.log("에러 : ", error);
             next(error);
@@ -62,14 +82,14 @@ export class PetsController {
 
             if (!petId) throw new CustomError('존재하지 않는 펫입니다.', 404);
 
-            if(!petName) throw new CustomError('펫 이름 수정하세요', 400);
+            if (!petName) throw new CustomError('펫 이름 수정하세요', 400);
 
-            if(!petAge) throw new CustomError('펫 나이 수정하세요', 400);
+            if (!petAge) throw new CustomError('펫 나이 수정하세요', 400);
 
-            if(!imgUrl) throw new CustomError('펫 사진 수정하세요', 400);
+            if (!imgUrl) throw new CustomError('펫 사진 수정하세요', 400);
 
-            if(!petCategory) throw new CustomError('펫 카테고리 수정하세요', 400);
-        
+            if (!petCategory) throw new CustomError('펫 카테고리 수정하세요', 400);
+
             const updatedPet = await this.petsService.updatePet(
                 petId, petName, petAge, imgUrl, petCategory
             )
@@ -94,7 +114,7 @@ export class PetsController {
         try {
             const { petId } = req.params;
 
-            if (!petId) throw new CustomError('존재하지 않는 펫입니다.',404);
+            if (!petId) throw new CustomError('존재하지 않는 펫입니다.', 404);
 
             const deletedPet = await this.petsService.deletePet(petId);
 

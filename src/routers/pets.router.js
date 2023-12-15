@@ -13,6 +13,10 @@ petsRouter.post('/', auth, petsController.createPet);
 petsRouter.get('/', auth, petsController.getMyPets);
 
 
+//유저의 펫 조회
+petsRouter.get('/user/:userId', auth, petsController.getUserPets);
+
+
 // 펫 수정 
 petsRouter.put('/:petId', auth, petsController.updatePet);
 
