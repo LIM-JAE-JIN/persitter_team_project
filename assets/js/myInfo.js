@@ -8,6 +8,8 @@ const { token, requireLogin } = auth();
 document.addEventListener('DOMContentLoaded', async () => {
   const user = await requireLogin();
   const appointmentInfo = await getMyAppointment();
+  const myPet = await getMyPets();
+
   console.log(appointmentInfo);
 
   document.getElementById(
@@ -20,15 +22,53 @@ document.addEventListener('DOMContentLoaded', async () => {
     'span-user-address',
   ).innerHTML = `ADDRESS : ${user.address}`;
 
-  document.getElementById(
-    'span-appointment-date',
-  ).innerHTML = `Appointment Date : ${appointmentInfo[0].date}`;
-  document.getElementById(
-    'span-appointment-phone',
-  ).innerHTML = `Appointment Phone : ${appointmentInfo[0].sitterPhone}`;
-  document.getElementById(
-    'span-appointment-address',
-  ).innerHTML = `appointment address: ${appointmentInfo[0].address}`;
+  const appointmentlist = document.getElementById('appointment_list');
+
+  appointmentInfo.forEach((element) => {
+    let appointmentHtml = ` 
+        <a href="#" class="btn btn-primary" 
+        onclick="quitAppointment()" style="float: right">예약 취소</a>
+
+        <p class="card-text" id="span-appointment-date"
+          style="font-size: 15px; margin-bottom: 10px;">
+          Appointment Date : ${element.date}
+         </p>
+
+        <p class="card-text" id="span-appointment-phone"
+          style="font-size: 15px; margin-bottom: 10px;">
+          Appointment Phone : ${element.sitterPhone}
+        </p>
+
+        <p class="card-text" id="span-appointment-address" 
+          style="font-size: 15px; margin-bottom: 20px; 
+          border-bottom: 1px solid #000;">
+          Appointment address: ${element.address}
+        </p>    
+      `;
+
+    appointmentlist.innerHTML += appointmentHtml;
+  });
+
+  const petList = document.getElementById('petWrap');
+
+  myPet.forEach((pet) => {
+    let petHtml = `
+    <li>
+    <div class="card">
+      <img src="${pet.imgUrl}" class="card-img-top" alt="..." />
+      <div class="card-body">
+        <h5 class="card-title">${pet.petName}</h5>
+        <p class="card-text">${pet.petAge}</p>
+        <a href="#" class="btn btn-primary" style="margin-top: 10px"
+          >삭제</a
+        >
+      </div>
+    </div>
+  </li>      
+        `;
+
+    petList.innerHTML += petHtml;
+  });
 });
 
 function getCookieValue(name) {
@@ -202,4 +242,22 @@ async function deleteAppointment(appointmentId) {
     `http://localhost:3000/api/appointments/${appointmentId}`,
     options,
   );
+}
+
+// 내 펫 그려주기
+
+async function getMyPets() {
+  const response = await fetch('http://localhost:3000/api/pets/user');
+  const responseData = await response.json();
+
+  if (!responseData.success) {
+    return alert(`${responseData.message}`);
+  }
+  const pets = responseData.data;
+
+  if (pets.length === 0) {
+    return alert('펫 등록 후 사용해주세요');
+  }
+
+  return pets;
 }

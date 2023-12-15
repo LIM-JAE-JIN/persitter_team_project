@@ -1,1 +1,16 @@
-1
+@host = http://localhost:3000/api
+
+### 펫 등록
+POST {{host}}/pets
+Content-Type: application/json
+
+
+{
+"petName": "구름이2",
+"petAge": 2,
+"petCategory": "DOG",
+"imgUrl": "https://cdn.discordapp.com/attachments/1178869775535984690/1185184599077298257/image.png?ex=658eb02c&is=657c3b2c&hm=15b6906b24c42d7fcb6b5ffe2410916445ac1cf50e48831f45e330b468e02f77&"
+}
+
+
+###펫 가져오기

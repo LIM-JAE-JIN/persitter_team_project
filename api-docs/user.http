@@ -21,7 +21,7 @@ Content-Type: application/json
 
 {
   "email": "test@naver.com",
-  "password": "test123"
+  "password": "test1234"
 }
 
 ### Sign-Out
