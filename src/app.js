@@ -35,6 +35,7 @@ app.use(
     store: sessionStore,
     cookie: {
       maxAge: 1000 * 60 * 60 * 24, // 쿠키의 만료 기간을 1일로 설정합니다.
+      httpOnly: false
     },
   }),
 );
@@ -46,3 +47,5 @@ app.use(errorHandling);
 app.listen(process.env.SERVER_PORT, () => {
   console.log(`연결성공, 포트 ${process.env.SERVER_PORT}`);
 });
+
+

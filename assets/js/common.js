@@ -1,5 +1,7 @@
 window.drPopupOpen = drPopupOpen;
 window.drPopupClose = drPopupClose;
+window.signOut = signOut;
+
 
 //팝업 열기
 function drPopupOpen(popName) {
@@ -14,25 +16,50 @@ function drPopupClose(im) {
     $('.dr-dim').css('display', 'none');
 }
 
-$(document).ready(function () {
-    // 세션 ID를 가져옵니다.
-    var sessionId = getCookie('connect.sid');
+// 세션 ID를 가져옵니다.
+const sessionId = getCookie('connect.sid');
+console.log(sessionId);
 
-    // 세션 ID가 있는지 여부에 따라 탭을 토글합니다.
-    if (sessionId) {
-        // 세션 ID가 있으면 로그인 상태로 간주하고 로그인 탭을 표시합니다.
-        $('#loginTab').hide();
-        $('#logoutTab').show();
-    } else {
-        // 세션 ID가 없으면 로그아웃 상태로 간주하고 로그아웃 탭을 표시합니다.
-        $('#loginTab').show();
-        $('#logoutTab').hide();
-    }
-});
+// 세션 ID가 있는지 여부에 따라 탭을 토글합니다.
+if (sessionId) {
+    // 세션 ID가 있으면 로그인 상태로 간주하고 로그인 탭을 표시합니다.
+    $('#loginTab').hide();
+    $('#logoutTab').show();
+} else {
+    // 세션 ID가 없으면 로그아웃 상태로 간주하고 로그아웃 탭을 표시합니다.
+    $('#loginTab').show();
+    $('#logoutTab').hide();
+}
 
-// 쿠키에서 특정 이름의 쿠키 값을 가져오는 함수
 function getCookie(name) {
-    var value = "; " + document.cookie;
-    var parts = value.split("; " + name + "=");
-    if (parts.length === 2) return parts.pop().split(";").shift();
+    // 쿠키 문자열을 가져옵니다.
+    const cookieString = document.cookie;
+
+    // 쿠키 문자열을 세미콜론으로 분할합니다.
+    const cookies = cookieString.split(';');
+
+    // 주어진 이름에 해당하는 쿠키를 찾습니다.
+    for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim(); // 좌우 공백 제거
+
+        // 쿠키의 이름과 값으로 나눕니다.
+        const [cookieName, cookieValue] = cookie.split('=');
+
+        // 주어진 이름에 해당하는 쿠키를 찾으면 해당 값을 반환합니다.
+        if (cookieName === name) {
+            return cookieValue;
+        }
+    }
+
+    // 주어진 이름에 해당하는 쿠키를 찾지 못한 경우 null을 반환합니다.
+    return null;
+}
+
+async function signOut() {
+    // 백엔드 조회 api 가져오기
+    const response = await fetch(`http://localhost:3000/api/users/signout`);
+    const signOut = await response.json();
+
+    alert(signOut.message);
+    window.location.href = '/page/main.html';
 }

@@ -43,12 +43,17 @@ const makeCard = (sitters) => {
         <div class="card-body">
           <h5 class="card-title" style="font-size: 16px">${sitter.name}</h5>
           <p class="card-text" style="margin-bottom: 10px; font-size: 13px">
-            ${sitter.introduce}
-            <br />
-            <br />
-            펫시터 경력 : ${sitter.career}
+            <span style="
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            -webkit-line-clamp: 2;
+            height:26px;
+            margin-bottom:20px;
+            ">${sitter.introduce}</span>
+            <span>펫시터 경력 : ${sitter.career}</span>
           </p>
-          <a href="/page/sitterDetail.html?sitter=${sitter.sitterId}" class="btn btn-primary right">자세히 보기</a>
+          <a href="/page/sitterDetail.html?sitter=${sitter.sitterId}" class="btn btn-primary" style="float:right">자세히 보기</a>
         </div>
       </div>
     </li>`,
