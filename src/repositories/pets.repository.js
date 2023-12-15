@@ -32,6 +32,20 @@ export class PetsRepository {
     }
 
 
+    // 유저의 펫 조회
+    getUserPets = async (userId) => {
+        const userPets = await prisma.Users.findUnique({
+            where: {
+                userId: +userId,
+            },
+            include: {
+                Pets: true,
+            },
+        });
+
+        return userPets?.Pets || [];
+    }
+
 
     findPetById = async (petId) => {
         const pet = await prisma.Pets.findUnique({
@@ -64,6 +78,6 @@ export class PetsRepository {
                 where: { petId: +petId },
             });
 
-            return pet;
+        return pet;
     }
 }

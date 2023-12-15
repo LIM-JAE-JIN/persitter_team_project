@@ -650,8 +650,8 @@ input::placeholder {
   margin: 0 auto;
 }
 .header .header_wrap h2 {
-  min-width: 113px;
-  width: 113px;
+  min-width: 150px;
+  width: 150px;
 }
 .header .header_wrap h2 img {
   width: 100%;
@@ -846,6 +846,28 @@ input::placeholder {
   left: 0;
   bottom: 0;
   right: 0;
+}
+
+.dr-signup-container {
+  width: 510px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.dr-signup-wrap {
+  padding: 6rem 5.2rem 6rem 5.2rem;
+  border-radius: 20px;
+  box-shadow: 0px 1px 23px 0px rgba(0, 0, 0, 0.05);
+  background-color: #fff;
+}
+
+.dr-bg-brown {
+  background-color: #623c35 !important;
+}
+
+.dr-bg-orange {
+  background-color: #ff9a69 !important;
 }
 
 /* ------footer------ s */

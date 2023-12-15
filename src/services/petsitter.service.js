@@ -1,22 +1,28 @@
 export class PetsitterService {
-  constructor(petsitterRefository) {
-    this.petsitterRefository = petsitterRefository;
+  constructor(petsitterRepository) {
+    this.petsitterRepository = petsitterRepository;
   }
 
   getSitters = async () => {
-    const data = await this.petsitterRefository.getSitters();
+    const data = await this.petsitterRepository.getSitters();
 
     return data.map((sitter) => {
       return {
-        sittetId: sitter.sittetId,
+        sitterId: sitter.sitterId,
         name: sitter.name,
         introduce: sitter.introduce,
         phone: sitter.phone,
+        imgUrl: sitter.imgUrl,
         address: sitter.address,
         career: sitter.career,
         createdAt: sitter.createdAt,
-        updatedAt: sitter.updatedAt
-      }
-    })
-  }
+        updatedAt: sitter.updatedAt,
+      };
+    });
+  };
+  getSitterById = async (sitterId) => {
+    const data = await this.petsitterRepository.getSitterById(sitterId);
+
+    return data;
+  };
 }
