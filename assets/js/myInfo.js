@@ -150,6 +150,7 @@ async function getMyAppointment() {
 //회원 탈퇴
 
 window.signOut = signOut;
+window.quitAppointment = quitAppointment;
 
 async function signOut() {
   const msg = '탈퇴하시겠습니까?';
@@ -173,4 +174,29 @@ async function deleteUser() {
   };
 
   const response = await fetch('http://localhost:3000/api/users/me', options);
+}
+
+async function quitAppointment() {
+  const msg = '예약을 취소 하시겠습니까?';
+  const flag = confirm(msg);
+
+  if (flag) {
+    await deleteAppointment();
+    alert('예약이 취소되었습니다.');
+    location.reload(true);
+  }
+}
+
+async function deleteAppointment() {
+  const options = {
+    method: 'DELETE',
+    headers: {
+      authorization: `${getCookieValue('connect.sid')}`,
+      'Content-Type': 'application/json',
+    },
+  };
+
+  const response = await fetch(
+    `http://localhost:3000/api/appointments/${appointmentId}`,
+  );
 }
