@@ -54,12 +54,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   myPet.forEach((pet) => {
     let petHtml = `
     <li>
-    <div class="card">
+    <div class="card" >
       <img src="${pet.imgUrl}" class="card-img-top" alt="..." />
       <div class="card-body">
         <h5 class="card-title">${pet.petName}</h5>
         <p class="card-text">${pet.petAge}</p>
-        <a href="#" class="btn btn-primary" style="margin-top: 10px"
+        <a href="#" class="btn btn-primary" onclick = "deleteMyPet(${pet.petId})" style="margin-top: 10px"
           >삭제</a
         >
       </div>
@@ -139,6 +139,8 @@ async function updateMyInfo(profileDate) {
     };
     const response = await fetch('http://localhost:3000/api/users/me', options);
     const data = await response.json();
+
+    return data;
   } catch (error) {
     console.log(error);
   }
@@ -237,7 +239,6 @@ async function deleteAppointment(appointmentId) {
     },
   };
 
-  console.log(appointmentId);
   const response = await fetch(
     `http://localhost:3000/api/appointments/${appointmentId}`,
     options,
@@ -260,4 +261,78 @@ async function getMyPets() {
   }
 
   return pets;
+}
+
+//펫 등록
+
+async function createMyPet(myPet) {
+  try {
+    const options = {
+      method: 'POST',
+      headers: {
+        authorization: `${getCookieValue('connect.sid')}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(myPet),
+    };
+
+    const response = await fetch('http://localhost:3000/api/pets', options);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+$('#create_btn').on('click', async function () {
+  const petName = document.getElementById('petName').value;
+  const petAge = document.getElementById('petAge').value;
+  const imgUrl = document.getElementById('petUrl').value;
+  const petCategory = document.getElementById('petCategory').value;
+
+  console.log(imgUrl);
+
+  const editInput = {
+    petName,
+    petAge: Number(petAge),
+    imgUrl,
+    petCategory,
+  };
+
+  const createdPet = await createMyPet(editInput);
+
+  if (createdPet) {
+    alert('펫이 등록이 완료되었습니다');
+    location.reload(true);
+  } else {
+    alert('등록에 실패했습니다.');
+    return;
+  }
+});
+
+window.deleteMyPet = deleteMyPet;
+
+//펫 삭제
+async function deleteMyPet(petId) {
+  const msg = '펫을 삭제 하시겠습니까?';
+  const flag = confirm(msg);
+  if (flag) {
+    await deletePet(Number(petId));
+    alert('펫이 삭제 되었습니다..');
+    location.reload(true);
+  }
+}
+
+async function deletePet(petId) {
+  const options = {
+    method: 'DELETE',
+    headers: {
+      authorization: `${getCookieValue('connect.sid')}`,
+      'Content-Type': 'application/json',
+    },
+  };
+  const response = await fetch(
+    `http://localhost:3000/api/pets/${petId}`,
+    options,
+  );
 }
