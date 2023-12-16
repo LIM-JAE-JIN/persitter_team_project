@@ -4,8 +4,8 @@ export class AppointmentsService {
   constructor(appointmentsRepository) {
     this.appointmentsRepository = appointmentsRepository;
   }
-  getAppointments = async (userId, userEmail) => {
-    const appointments = await this.appointmentsRepository.getAppointments(
+  getAppointmentsById = async (userId, userEmail) => {
+    const appointments = await this.appointmentsRepository.getAppointmentsById(
       userId,
     );
     if (appointments.length === 0) {

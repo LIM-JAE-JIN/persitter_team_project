@@ -8,13 +8,15 @@
     <link rel="stylesheet" href="/css/sitterDetail.css" />
     <script type="module" src="/js/jquery-3.6.3.min.js"></script>
     <script type="module" src="/js/common.js"></script>
+    <script type="module" src="/js/sitterDetail.js"></script>
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <!-- 메인에서 클릭한 사람의 이름 -->
     <title></title>
+    <style></style>
   </head>
   <body>
-    <!-- 게시글 생성 팝업 s -->
-    <div class="dr-dim">
+    <!-- 예약 생성 팝업 s -->
+    <div class="dr-dim">   </div>
       <div
         id="appointment_modal"
         class="dr-popup-wrap sitter-popup-appointment"
@@ -32,32 +34,34 @@
                 aria-label="Floating label select example"
                 id="selectSitter"
               >
-                <option value="한승준">한승준</option>
+                <!-- <option value="한승준">한승준</option>
                 <option value="이낙규">이낙규</option>
                 <option value="임재진">임재진</option>
-                <option value="하정현">하정현</option>
+                <option value="하정현">하정현</option> -->
               </select>
             </div>
             <div class="mb-5 dr-input-wrap">
-              <label for="post_genre">My Pet`s</label>
-              <select
-                class="form-select form-select-lg mb-3"
-                aria-label="Floating label select example"
-                id="selectPets"
-              >
-                <option value="고양이">고양이</option>
-                <option value="냥이">냥이</option>
-                <option value="양이">양이</option>
-                <option value="이">이</option>
-              </select>
+              <label>My Pet`s</label>
+              <div id="myPetList">
+                <!-- 
+                <input type="checkbox" id="nyangCheckbox" value="냥이" />
+                <label for="nyangCheckbox">냥이</label>
+
+                <input type="checkbox" id="yangCheckbox" value="양이" />
+                <label for="yangCheckbox">양이</label>
+
+                <input type="checkbox" id="iCheckbox" value="이" />
+                <label for="iCheckbox">이</label> -->
+              </div>
             </div>
             <div class="mb-5 dr-input-wrap">
-              <input type="date" class="dr-input" />
+              <input type="date" class="dr-input" id="appointmentDate" />
             </div>
             <div class="mb-5 dr-input-wrap">
               <input
                 type="text"
                 class="dr-input"
+                id="appointmentPhone"
                 placeholder="전화번호를 입력해주세요."
               />
             </div>
@@ -85,22 +89,23 @@
               <input
                 type="text"
                 class="dr-input"
+                id="appointmentSignificant"
                 placeholder="특이사항을 입력해주세요"
               />
             </div>
-          </div>
+       
           <footer>
             <div class="d-flex justify-content-between dr-bg-white">
               <a
-                href="#none"
+               
                 class="dr-button"
                 id="create_btn"
-                onclick="drPopupClose(this)"
+                onclick="createAppointment()"
                 style="background-color: #623c35; color: #fff; border: 0"
                 >예약하기</a
               >
               <a
-                href="#none"
+              
                 class="dr-button"
                 id="cancel_btn"
                 onclick="drPopupClose(this)"
@@ -112,38 +117,89 @@
         </div>
       </div>
     </div>
+    <!-- 예약 생성 팝업 e -->
 
-    <!-- 게시글 생성 팝업 e -->
+<!-- 댓글 수정 팝업 -->
+<div class="dr-dim">
+  <div
+    id="reviewEditPopup"
+    class="dr-popup-wrap review-popup-edit"
+    style="width: 640px"
+  >
+    <div id="post_content">
+      <header style="background-color: transparent">
+        <h1>댓글 수정 하기</h1>
+      </header>
+      <div class="dr-popup-content">
+        <div class="mb-5 dr-input-wrap">
+          <input
+            type="text"
+            class="dr-input"
+            id="appointmentSignificant"
+            placeholder="수정할 내용을 입력해주세요"
+          />
+        </div>
+      </div>
+      <footer>
+        <div class="d-flex justify-content-between dr-bg-white">
+          <a
+       
+            class="dr-button"
+            id="create_btn"
+            style="background-color: #623c35; color: #fff; border: 0"
+            >수정하기</a
+          >
+          <a
+          
+            class="dr-button"
+            id="cancel_btn"
+            onclick="drPopupClose(this)"
+            style="background-color: #ff9a69; color: #fff; border: 0"
+            >취소</a
+          >
+        </div>
+      </footer>
+    </div>
+  </div>
+</div>
+<!-- 댓글 수정 팝업 -->
+
+    <audio id="audioPlayer" controls style="display: none;">
+      <source src="/images/main_sound.m4a" type="audio/mp3" />
+    </audio>
+
     <!-- header s -->
     <header class="header">
       <div
         class="dr-container header_wrap d-flex justify-content-start align-items-center"
       >
-        <h2>
+        <h2 style="display: flex; align-items: center;">
           <a href="/page/main.html"> F4 SITTER </a>
+          <div >
+          <img src="https://i.namu.wiki/i/Ubu08rEDKxjKdcKCjJXX_vnAU-j7xF2LvekkNnTyg6Ri5wtC3pMcPfAixvvNqB6snIWLkTr9_kn1_Q9SpY1xJBk6RkLy92Unrl7S5kHbg-L9Oywgxt6brOXw7catZ4Y_5xT_tW5lr-DVmWZTaFcnCA.webp" alt="" onclick="play()" style="cursor: pointer; width:60px">
         </h2>
         <div class="d-flex w-100 align-items-center">
           <ul class="dr-hd-log justify-content-end w-100">
             <li>
-              <div
-                class="dr-user-off d-flex"
-                id="loginTab"
-                style="display: none"
-              >
-                <a href="/page/login.html">로그인</a>
-                <a href="/page/join.html">회원가입</a>
+              <div class="dr-user-off" id="loginTab" style="display: none">
+                <a href="/page/signin.html">로그인</a>
+                <a href="/page/signup.html">회원가입</a>
               </div>
               <div
                 class="dr-user-on dr-user-off"
                 id="logoutTab"
                 style="display: none"
               >
-                <a href="#none">마이페이지</a>
-                <a href="#none">로그아웃</a>
+                <a href="/page/myInfo.html">마이페이지</a>
+                <a href="javascript:void(0);" onclick="signOut()">로그아웃</a>
               </div>
             </li>
           </ul>
         </div>
+        <div
+          class="dr-user-menu justify-content-end"
+          onclick="drPopupOpen('.dr-hd-m-menu')"
+        ></div>
       </div>
     </header>
     <div class="dr-header-box"></div>
@@ -166,15 +222,13 @@
         <img
           src="https://spnimage.edaily.co.kr/images/Photo/files/NP/P/2009/02/PP09020500087.JPG"
           alt=""
+          id="sitterImgUrl"
           width="150"
         />
       </div>
-      <div class="sitter-career-list">
-        <li>12년</li>
-        <li>집사생활 4년</li>
-      </div>
-      <div class="sitter-appointment-btn">
-        <button onclick="drPopupOpen(appointment_modal)">예약하기</button>
+      <div class="sitter-career-list" id="sitterInfoList"></div>
+      <div class="btn btn-primary" onclick="appointPopupOpen()">
+       예약하기
       </div>
     </div>
     <!-- 경력 -->
@@ -183,45 +237,40 @@
     <div class="review-container">
       <div class="review-create">
         <div class="review-submitForm">
-          <form
-            class="row justify-content-center review-form"
-            method="POST"
-            action="/api/review/15"
-          >
-            <input
-              type="text"
-              class="review-input form-control form-control-sm col-sm-9"
-              placeholder="내용을 입력하시오"
-              name="content"
-            />
-            <button
-              type="submit"
-              class="btn btn-secondary btn-sm review-btn col-sm-2"
+          <input
+            type="text"
+            id="reviewContent"
+            class="review-input form-control form-control-sm col-sm-9"
+            placeholder="내용을 입력하시오"
+          />
+          <div class="mb-5 dr-input-wrap">
+            <select
+              class="form-select form-select-lg mb-3"
+              aria-label="Floating label select example"
+              id="reviewRaiting"
             >
-              review
-            </button>
-          </form>
+              <option value="10">10</option>
+              <option value="9">9</option>
+              <option value="8">8</option>
+              <option value="7">7</option>
+              <option value="6">6</option>
+              <option value="5">5</option>
+              <option value="4">4</option>
+              <option value="3">3</option>
+              <option value="2">2</option>
+              <option value="1">1</option>
+            </select>
+          </div>
+          <button
+            type="button"
+            onclick="createReview()"
+            class="btn btn-secondary btn-sm review-btn col-sm-2"
+          >
+            review
+          </button>
         </div>
       </div>
-      <div class="review-list">
-        <div class="review-list">
-          <li class="reviews">
-            <p>
-              <img
-                src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-                alt=""
-              />
-              <span style="font-weight: bold">123123@naver.com</span>
-            </p>
-            <p class="review-content">asasdasdasdasdd</p>
-            <div class="review-btnFD">
-              <p class="review-createdAt">
-                Thu Dec 14 2023 13:32:58 GMT+0900 (대한민국 표준시)
-              </p>
-            </div>
-          </li>
-        </div>
-      </div>
+      <div class="review-list" id="sitterReviewList"></div>
     </div>
     <!-- 리뷰 -->
 
@@ -251,6 +300,58 @@
     </footer>
     <!-- footer -->
 
-    <script></script>
+    <script>
+      // address From
+      function sample6_execDaumPostcode() {
+        new daum.Postcode({
+          oncomplete: function (data) {
+            // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+            // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+            // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+            let addr = ''; // 주소 변수
+            let extraAddr = ''; // 참고항목 변수
+
+            //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+            if (data.userSelectedType === 'R') {
+              // 사용자가 도로명 주소를 선택했을 경우
+              addr = data.roadAddress;
+            } else {
+              // 사용자가 지번 주소를 선택했을 경우(J)
+              addr = data.jibunAddress;
+            }
+
+            // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+            if (data.userSelectedType === 'R') {
+              // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+              // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+              if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+                extraAddr += data.bname;
+              }
+              // 건물명이 있고, 공동주택일 경우 추가한다.
+              if (data.buildingName !== '' && data.apartment === 'Y') {
+                extraAddr +=
+                  extraAddr !== ''
+                    ? ', ' + data.buildingName
+                    : data.buildingName;
+              }
+              // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+              if (extraAddr !== '') {
+                extraAddr = ' (' + extraAddr + ')';
+              }
+            }
+            document.getElementById('sample6_address').value = addr;
+            // 커서를 상세주소 필드로 이동한다.
+            document.getElementById('sample6_detailAddress').focus();
+          },
+        }).open();
+      }
+      // address From
+
+      function play() {
+  var audio = document.getElementById('audioPlayer');
+  audio.play();
+}
+    </script>
   </body>
 </html>

@@ -5,11 +5,11 @@ export class AppointmentsController {
     this.appointmentsService = appointmentsService;
   }
 
-  getAppointments = async (req, res, next) => {
+  getAppointmentsById = async (req, res, next) => {
     try {
       const { userId } = req.user;
       const { email } = req.user;
-      const appointments = await this.appointmentsService.getAppointments(
+      const appointments = await this.appointmentsService.getAppointmentsById(
         userId,
         email,
       );
