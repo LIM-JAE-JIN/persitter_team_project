@@ -1,10 +1,12 @@
 import { drPopupOpen } from './common.js';
+import { drPopupClose } from './common.js';
 
 window.createReview = createReview;
 window.appointPopupOpen = appointPopupOpen;
 window.createAppointment = createAppointment;
 window.deleteReview = deleteReview;
 window.editReview = editReview;
+window.editReviewBtn = editReviewBtn;
 
 //팝업 열기
 async function appointPopupOpen() {
@@ -247,9 +249,45 @@ async function deleteReview(reviewId) {
     alert(`${error.message}`);
   }
 }
-
 async function editReview(reviewId) {
   drPopupOpen('#reviewEditPopup');
+  console.log(reviewId);
+  const saveButton = document.getElementById('reviewEditbtn');
+  console.log(saveButton);
+  saveButton.addEventListener('click', async () => {
+    await editReviewBtn(reviewId);
+  });
+}
+async function editReviewBtn(reviewId) {
+  console.log(reviewId);
+  const editContent = document.getElementById('editContent');
+  let reviewRaiting = document.getElementById('reviewRaiting').value;
+  let queryString = window.location.search;
+  let urlParams = new URLSearchParams(queryString);
+  let sitterId = urlParams.get('sitter');
+  const data = {
+    content: `${editContent.value}`,
+    raiting: +reviewRaiting,
+  };
+
+  const response = await fetch(
+    `http://localhost:3000/api/reviews/${sitterId}/${reviewId}`,
+    {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    },
+  );
+  const responseData = await response.json();
+  if (!responseData.success) {
+    return alert(`${responseData.message}`);
+  }
+  let jsonSitterId = { sitterId: sitterId };
+  await getSitterReviews(jsonSitterId);
+  alert('댓글이 성공적으로 수정됬습니다');
+  drPopupClose('#reviewEditPopup');
 }
 
 getSitter();

@@ -9,7 +9,7 @@ export function drPopupOpen(popName) {
   $(popName).css('display', 'block');
 }
 //팝업 닫기
-function drPopupClose(im) {
+export function drPopupClose(im) {
   $('body').css('overflow', 'auto');
   $(im).closest('.dr-popup-wrap').css('display', 'none');
   $('.dr-dim').css('display', 'none');
