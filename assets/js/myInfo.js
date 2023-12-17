@@ -6,53 +6,56 @@ const headers = {
 const { token, requireLogin } = auth();
 
 document.addEventListener('DOMContentLoaded', async () => {
-  const user = await requireLogin();
-  const appointmentInfo = await getMyAppointment();
-  const myPet = await getMyPets();
+  try {
+    const user = await requireLogin();
+    const appointmentInfo = await getMyAppointment();
+    const myPet = await getMyPets();
 
-  console.log(appointmentInfo);
+    document.getElementById(
+      'span-user-email',
+    ).innerHTML = `EMAIL : ${user.email}`;
+    document.getElementById(
+      'span-user-phone',
+    ).innerHTML = `PHONE : ${user.phone}`;
+    document.getElementById(
+      'span-user-address',
+    ).innerHTML = `ADDRESS : ${user.address}`;
 
-  document.getElementById(
-    'span-user-email',
-  ).innerHTML = `EMAIL : ${user.email}`;
-  document.getElementById(
-    'span-user-phone',
-  ).innerHTML = `PHONE : ${user.phone}`;
-  document.getElementById(
-    'span-user-address',
-  ).innerHTML = `ADDRESS : ${user.address}`;
+    const appointmentlist = document.getElementById('appointment_list');
 
-  const appointmentlist = document.getElementById('appointment_list');
+    if (appointmentInfo) {
+      appointmentInfo.forEach((element) => {
+        let appointmentHtml = ` 
+          <a href="#" class="btn btn-primary" 
+          onclick="quitAppointment()" style="float: right">예약 취소</a>
+  
+          <p class="card-text" id="span-appointment-date"
+            style="font-size: 15px; margin-bottom: 10px;">
+            Appointment Date : ${element.date}
+           </p>
+  
+          <p class="card-text" id="span-appointment-phone"
+            style="font-size: 15px; margin-bottom: 10px;">
+            Appointment Phone : ${element.sitterPhone}
+          </p>
+  
+          <p class="card-text" id="span-appointment-address" 
+            style="font-size: 15px; margin-bottom: 20px; 
+            border-bottom: 1px solid #000;">
+            Appointment address: ${element.address}
+          </p>    
+        `;
 
-  appointmentInfo.forEach((element) => {
-    let appointmentHtml = ` 
-        <a href="#" class="btn btn-primary" 
-        onclick="quitAppointment()" style="float: right">예약 취소</a>
+        appointmentlist.innerHTML += appointmentHtml;
+      });
+    } else {
+      appointmentlist.innerHTML += `<p style="font-size: 15px; margin-bottom: 10px;"> 아직 예약 목록이 없습니다.</p>`;
+    }
 
-        <p class="card-text" id="span-appointment-date"
-          style="font-size: 15px; margin-bottom: 10px;">
-          Appointment Date : ${element.date}
-         </p>
+    const petList = document.getElementById('petWrap');
 
-        <p class="card-text" id="span-appointment-phone"
-          style="font-size: 15px; margin-bottom: 10px;">
-          Appointment Phone : ${element.sitterPhone}
-        </p>
-
-        <p class="card-text" id="span-appointment-address" 
-          style="font-size: 15px; margin-bottom: 20px; 
-          border-bottom: 1px solid #000;">
-          Appointment address: ${element.address}
-        </p>    
-      `;
-
-    appointmentlist.innerHTML += appointmentHtml;
-  });
-
-  const petList = document.getElementById('petWrap');
-
-  myPet.forEach((pet) => {
-    let petHtml = `
+    myPet.forEach((pet) => {
+      let petHtml = `
     <li>
     <div class="card" >
       <img src="${pet.imgUrl}" class="card-img-top" alt="..." />
@@ -67,8 +70,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   </li>      
         `;
 
-    petList.innerHTML += petHtml;
-  });
+      petList.innerHTML += petHtml;
+    });
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 function getCookieValue(name) {
@@ -191,10 +197,10 @@ async function getMyAppointment() {
 
 //회원 탈퇴
 
-window.signOut = signOut;
+window.deleteAccout = deleteAccout;
 window.quitAppointment = quitAppointment;
 
-async function signOut() {
+async function deleteAccout() {
   const msg = '탈퇴하시겠습니까?';
   const flag = confirm(msg);
 
